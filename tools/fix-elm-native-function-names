@@ -1,0 +1,8 @@
+#!/usr/bin/env bash
+
+# $1 github organization
+# $2 github repo
+# $3 input file
+# $4 output file
+
+cat $3 | sed "s/_yjpark\$elm_yjpark_util\$Native/_${1}\$${2}\$Native/g" > $4
