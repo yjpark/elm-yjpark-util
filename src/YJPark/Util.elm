@@ -8,8 +8,8 @@ module YJPark.Util exposing
     , noReaction, Updater, Wrapper, wrap
     , (===), (/==))
 
-import Native.YJPark.Util
-import Native.YJPark.Guid
+import Native.Util
+import Native.Guid
 
 import Update.Extra
 

@@ -1,4 +1,4 @@
-var _yjpark$elm_yjpark_util$Native_YJPark_Util = function() {
+var _yjpark$elm_yjpark_util$Native_Util = function() {
 
 function now_time() {
   return Date.now();

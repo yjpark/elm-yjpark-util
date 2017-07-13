@@ -1,6 +1,6 @@
 // From npm package:
 //   "guid": "0.0.12",
-var _yjpark$elm_yjpark_util$Native_YJPark_Guid = function() {
+var _yjpark$elm_yjpark_util$Native_Guid = function() {
   var validator = new RegExp("^[a-z0-9]{8}-[a-z0-9]{4}-[a-z0-9]{4}-[a-z0-9]{4}-[a-z0-9]{12}$", "i");
 
   function gen(count) {
