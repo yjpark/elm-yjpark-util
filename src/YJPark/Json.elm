@@ -1,5 +1,7 @@
 module YJPark.Json exposing (..)
 
+import YJPark.Util exposing (..)
+
 import Json.Decode as Decode
 import Json.Encode as Encode
 import Dict
@@ -82,15 +84,16 @@ dataToValue data =
 
 
 valueToData : Value -> Data
-valueToData value =
-    if value == null then
+valueToData val =
+    if val == null then
         empty
     else
-        case Decode.decodeValue (Decode.dict Decode.value) value of
+        case Decode.decodeValue (Decode.dict Decode.value) val of
             Ok result ->
                 result
             Err err ->
-                Debug.log ("valueToData: Decode Failed: " ++ err) empty
+                let _ = error3 "[Json] valueToData: Decode Failed: " err val in
+                empty
 
 
 stringToValue : String -> Value
@@ -110,6 +113,7 @@ asString val =
         Ok val ->
             val
         Err err ->
+            let _ = error3 "[Json] asString: Decode Failed: " err val in
             err
 
 
@@ -119,6 +123,7 @@ getStringWithDefault key default val =
         Ok val ->
             val
         Err err ->
+            let _ = error3 "[Json] getStringWithDefault: Decode Failed: " err val in
             default
 
 
@@ -133,6 +138,7 @@ getIntWithDefault key default val =
         Ok val ->
             val
         Err err ->
+            let _ = error3 "[Json] getIntWithDefault: Decode Failed: " err val in
             default
 
 
@@ -147,6 +153,7 @@ getFloatWithDefault key default val =
         Ok val ->
             val
         Err err ->
+            let _ = error3 "[Json] getFloatWithDefault: Decode Failed: " err val in
             default
 
 
@@ -161,6 +168,7 @@ getBoolWithDefault key default val =
         Ok val ->
             val
         Err err ->
+            let _ = error3 "[Json] getBoolWithDefault: Decode Failed: " err val in
             default
 
 
@@ -175,6 +183,7 @@ getValueWithDefault key default val =
         Ok val ->
             val
         Err err ->
+            let _ = error3 "[Json] getValueWithDefault: Decode Failed: " err val in
             default
 
 
