@@ -5,7 +5,7 @@ var _yjpark$elm_yjpark_util$Native_Mdl = function() {
 function reset_index(mdl) {
   var index = mdl.hacky_index_;
   mdl.hacky_index_ = 0;
-  console.error("[Mdl.reset_index]", mdl, index);
+  //console.error("[Mdl.reset_index]", mdl, index);
   return index;
 }
 
@@ -13,7 +13,7 @@ function reset_index(mdl) {
 function new_index(mdl) {
   var index = mdl.hacky_index_;
   mdl.hacky_index_ = mdl.hacky_index_ + 1;
-  console.error("[MDL.new_index]", mdl, index);
+  //console.error("[MDL.new_index]", mdl, index);
   return index;
 }
 
