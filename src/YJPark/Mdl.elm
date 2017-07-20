@@ -1,10 +1,22 @@
 module YJPark.Mdl exposing (..)
+import YJPark.Mdl.Events as Events
 
 import YJPark.Util exposing (..)
 import Native.Mdl
 
 import Material
 
+-- Events
+type alias Event obj msg = Events.Wrapper obj msg
+type alias Events obj msg = Events.Type obj msg
+
+noEvent = Events.null
+
+onClick = Events.onClick
+onInput = Events.onInput
+
+
+-- Mdl
 type alias Wrapper msg = Material.Msg msg -> msg
 
 
