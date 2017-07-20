@@ -3,7 +3,7 @@ module YJPark.Mdl.Events exposing (..)
 import YJPark.Util exposing (..)
 
 
-type alias Wrapper obj msg = obj -> msg -> msg
+type alias Wrapper obj msg = obj -> msg
 
 
 type alias Type obj msg =
