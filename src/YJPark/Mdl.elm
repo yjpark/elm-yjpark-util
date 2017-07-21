@@ -8,7 +8,6 @@ import Material
 import Html exposing (Html)
 
 -- Events
-type alias Event obj msg = Events.Wrapper obj msg
 type alias Events obj msg = Events.Type obj msg
 
 noEvent = Events.null

@@ -3,12 +3,13 @@ module YJPark.Mdl.Events exposing (..)
 import YJPark.Util exposing (..)
 
 
-type alias Wrapper obj msg = obj -> msg
+type alias OnClick obj msg = obj -> msg
+type alias OnInput obj msg = obj -> String -> msg
 
 
 type alias Type obj msg =
-    { onClick : Maybe (Wrapper obj msg)
-    , onInput : Maybe (Wrapper obj msg)
+    { onClick : Maybe (OnClick obj msg)
+    , onInput : Maybe (OnInput obj msg)
     }
 
 
@@ -19,14 +20,14 @@ null =
     }
 
 
-onClick : Wrapper obj msg -> Type obj msg -> Type obj msg
+onClick : OnClick obj msg -> Type obj msg -> Type obj msg
 onClick wrapper model =
     { model
     | onClick = Just wrapper
     }
 
 
-onInput : Wrapper obj msg -> Type obj msg -> Type obj msg
+onInput : OnInput obj msg -> Type obj msg -> Type obj msg
 onInput wrapper model =
     { model
     | onInput = Just wrapper
