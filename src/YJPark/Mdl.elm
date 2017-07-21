@@ -5,6 +5,7 @@ import YJPark.Util exposing (..)
 import Native.Mdl
 
 import Material
+import Html exposing (Html)
 
 -- Events
 type alias Event obj msg = Events.Wrapper obj msg
@@ -14,6 +15,9 @@ noEvent = Events.null
 
 onClick = Events.onClick
 onInput = Events.onInput
+
+
+type alias Renderer obj msg = Events obj msg -> Type msg -> obj -> Html msg
 
 
 -- Mdl
