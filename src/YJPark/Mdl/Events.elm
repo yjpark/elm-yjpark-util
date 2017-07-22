@@ -2,6 +2,8 @@ module YJPark.Mdl.Events exposing (..)
 
 import YJPark.Util exposing (..)
 
+import Material.Options as Options exposing (Property)
+
 
 type alias OnClick obj msg = obj -> msg
 type alias OnInput obj msg = obj -> String -> msg
@@ -42,3 +44,12 @@ onFocus wrapper model =
     { model
     | onFocus = Just wrapper
     }
+
+
+onClickOption : Type obj msg -> obj -> Property c msg
+onClickOption model obj =
+    case model.onClick of
+        Nothing ->
+            Options.nop
+        Just onClick ->
+            Options.onClick (onClick obj)

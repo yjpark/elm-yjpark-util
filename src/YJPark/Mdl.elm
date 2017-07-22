@@ -15,6 +15,8 @@ noEvent = Events.null
 onClick = Events.onClick
 onInput = Events.onInput
 
+onClickOption = Events.onClickOption
+
 
 type alias Renderer obj msg = Events obj msg -> Type msg -> obj -> Html msg
 
