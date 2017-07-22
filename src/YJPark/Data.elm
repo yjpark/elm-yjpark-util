@@ -61,14 +61,14 @@ insertOptionalValue key val =
         identity
 
 
-dataToValue : Data -> Value
-dataToValue data =
+toValue : Data -> Value
+toValue data =
     Dict.toList data
         |> Encode.object
 
 
-valueToData : Value -> Data
-valueToData val =
+fromValue : Value -> Data
+fromValue val =
     if val == null then
         empty
     else
