@@ -23,6 +23,33 @@ onFocusOption = Events.onFocusOption
 
 type alias Renderer obj msg = Events obj msg -> Type msg -> obj -> Html msg
 
+-- Index
+type alias Index = List Int
+noIndex = []
+
+
+type alias WithIndex m =
+    { m | index : Index }
+
+
+updateIndex : Index -> WithIndex m -> WithIndex m
+updateIndex index model =
+    { model
+    | index = index
+    }
+
+
+setIndex : Int -> WithIndex m -> WithIndex m
+setIndex index model =
+    model
+        |> updateIndex [index]
+
+
+setSubIndex : Index -> Int -> WithIndex m -> WithIndex m
+setSubIndex parent index model =
+    model
+        |> updateIndex (parent ++ [index])
+
 
 -- Mdl
 type alias Wrapper msg = Material.Msg msg -> msg

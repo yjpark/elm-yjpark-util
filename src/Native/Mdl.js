@@ -14,7 +14,7 @@ function new_index(mdl) {
   var index = mdl.hacky_index_;
   mdl.hacky_index_ = mdl.hacky_index_ + 1;
   //console.error("[MDL.new_index]", mdl, index);
-  return index;
+  return [-1, index];
 }
 
 

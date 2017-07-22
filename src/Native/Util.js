@@ -11,28 +11,28 @@ function strict_equal(a, b) {
 var logId = 0;
 var logPrefix = "]================================================================\n";
 
-function log1(a) {
-  console.log("[" + (logId++) + logPrefix, a);
+function info1(a) {
+  console.info("[" + (logId++) + logPrefix, a);
 }
 
-function log2(a, b) {
-  console.log("[" + (logId++) + logPrefix, a, b);
+function info2(a, b) {
+  console.info("[" + (logId++) + logPrefix, a, b);
 }
 
-function log3(a, b, c) {
-  console.log("[" + (logId++) + logPrefix, a, b, c);
+function info3(a, b, c) {
+  console.info("[" + (logId++) + logPrefix, a, b, c);
 }
 
-function log4(a, b, c, d) {
-  console.log("[" + (logId++) + logPrefix, a, b, c, d);
+function info4(a, b, c, d) {
+  console.info("[" + (logId++) + logPrefix, a, b, c, d);
 }
 
-function log5(a, b, c, d, e) {
-  console.log("[" + (logId++) + logPrefix, a, b, c, d, e);
+function info5(a, b, c, d, e) {
+  console.info("[" + (logId++) + logPrefix, a, b, c, d, e);
 }
 
-function log6(a, b, c, d, e, f) {
-  console.log("[" + (logId++) + logPrefix, a, b, c, d, e, f);
+function info6(a, b, c, d, e, f) {
+  console.info("[" + (logId++) + logPrefix, a, b, c, d, e, f);
 }
 
 function error1(a) {
@@ -59,21 +59,51 @@ function error6(a, b, c, d, e, f) {
   console.error("[" + (logId++) + logPrefix, a, b, c, d, e, f);
 }
 
+function debug1(a) {
+  console.debug("[" + (logId++) + logPrefix, a);
+}
+
+function debug2(a, b) {
+  console.debug("[" + (logId++) + logPrefix, a, b);
+}
+
+function debug3(a, b, c) {
+  console.debug("[" + (logId++) + logPrefix, a, b, c);
+}
+
+function debug4(a, b, c, d) {
+  console.debug("[" + (logId++) + logPrefix, a, b, c, d);
+}
+
+function debug5(a, b, c, d, e) {
+  console.debug("[" + (logId++) + logPrefix, a, b, c, d, e);
+}
+
+function debug6(a, b, c, d, e, f) {
+  console.debug("[" + (logId++) + logPrefix, a, b, c, d, e, f);
+}
+
 return {
   now_time: now_time,
   strict_equal: F2(strict_equal),
-  log1: log1,
-  log2: F2(log2),
-  log3: F3(log3),
-  log4: F4(log4),
-  log5: F5(log5),
-  log6: F6(log6),
+  info1: info1,
+  info2: F2(info2),
+  info3: F3(info3),
+  info4: F4(info4),
+  info5: F5(info5),
+  info6: F6(info6),
   error1: error1,
   error2: F2(error2),
   error3: F3(error3),
   error4: F4(error4),
   error5: F5(error5),
-  error6: F6(error6)
+  error6: F6(error6),
+  debug1: debug1,
+  debug2: F2(debug2),
+  debug3: F3(debug3),
+  debug4: F4(debug4),
+  debug5: F5(debug5),
+  debug6: F6(debug6)
 };
 
 }();

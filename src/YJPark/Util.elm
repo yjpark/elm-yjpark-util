@@ -1,7 +1,8 @@
 module YJPark.Util exposing
     ( Guid, now_time, new_guid
-    , log, log1, log2, log3, log4, log5, log6
-    , error, error1, error2, error3, error4, error5, error6
+    , info1, info2, info3, info4, info5, info6
+    , error1, error2, error3, error4, error5, error6
+    , debug1, debug2, debug3, debug4, debug5, debug6
     , addCmd, updateModel, noOperation
     , toCmd, toFutureCmd
     , insertCmd, insertMapCmd
@@ -20,34 +21,46 @@ import Time
 import Process
 
 
-log1 = Native.Util.log1
-log2 = Native.Util.log2
-log3 = Native.Util.log3
-log4 = Native.Util.log4
-log5 = Native.Util.log5
-log6 = Native.Util.log6
+info1 : a -> String
+info1 = Native.Util.info1
+info2 : a -> b -> String
+info2 = Native.Util.info2
+info3 : a -> b -> c -> String
+info3 = Native.Util.info3
+info4 : a -> b -> c -> d -> String
+info4 = Native.Util.info4
+info5 : a -> b -> c -> d -> e -> String
+info5 = Native.Util.info5
+info6 : a -> b -> c -> d -> e -> f -> String
+info6 = Native.Util.info6
 
 
-log str a =
-    let
-        _ = log2 str a
-    in
-        a
-
-
+error1 : a -> String
 error1 = Native.Util.error1
+error2 : a -> b -> String
 error2 = Native.Util.error2
+error3 : a -> b -> c -> String
 error3 = Native.Util.error3
+error4 : a -> b -> c -> d -> String
 error4 = Native.Util.error4
+error5 : a -> b -> c -> d -> e -> String
 error5 = Native.Util.error5
+error6 : a -> b -> c -> d -> e -> f -> String
 error6 = Native.Util.error6
 
 
-error str a =
-    let
-        _ = error2 str a
-    in
-        a
+debug1 : a -> String
+debug1 = Native.Util.debug1
+debug2 : a -> b -> String
+debug2 = Native.Util.debug2
+debug3 : a -> b -> c -> String
+debug3 = Native.Util.debug3
+debug4 : a -> b -> c -> d -> String
+debug4 = Native.Util.debug4
+debug5 : a -> b -> c -> d -> e -> String
+debug5 = Native.Util.debug5
+debug6 : a -> b -> c -> d -> e -> f -> String
+debug6 = Native.Util.debug6
 
 
 addCmd = Update.Extra.addCmd

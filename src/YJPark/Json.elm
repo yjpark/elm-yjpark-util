@@ -46,7 +46,7 @@ decode isDebug msg decoder default val =
             let
                 _ = case isDebug of
                     True ->
-                        log5 "[Json] Decode Failed:" msg val err default
+                        debug5 "[Json] Decode Failed:" msg val err default
                     False ->
                         error5 "[Json] Decode Failed:" msg val err default
             in
