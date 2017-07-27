@@ -21,7 +21,7 @@ withJson : Renderer Json.Value msg -> Renderer (WithJson m) msg
 withJson renderer events mdl obj =
     let
         wrapped_events = events
-            |> Events.wrapEvents (\json -> { obj | json = json})
+            |> Events.wrap (\json -> { obj | json = json})
     in
         renderer wrapped_events mdl obj.json
 

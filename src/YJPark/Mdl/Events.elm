@@ -32,8 +32,8 @@ wrapEvent converter event =
 
 
 
-wrapEvents : (a -> b) -> Type b msg -> Type a msg
-wrapEvents converter events =
+wrap : (a -> b) -> Type b msg -> Type a msg
+wrap converter events =
     let
         wrapper = wrapEvent converter
     in
