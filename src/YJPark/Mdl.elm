@@ -1,4 +1,5 @@
 module YJPark.Mdl exposing (..)
+import YJPark.Mdl.Types as Types
 import YJPark.Mdl.Events as Events
 
 import YJPark.Util exposing (..)
@@ -9,9 +10,15 @@ import Html exposing (Html)
 import Dict
 
 
--- Events
-type alias Events obj msg = Events.Type obj msg
+-- Types
+type alias Wrapper msg = Types.Wrapper msg
+type alias Type msg = Types.Type msg
+type alias Model m msg = Types.Model m msg
+type alias Renderer obj msg = Types.Renderer obj msg
+type alias Events obj msg = Types.Events obj msg
 
+
+-- Events
 noEvent = Events.null
 
 onClick = Events.onClick
@@ -22,8 +29,6 @@ onClickOption = Events.onClickOption
 onInputOption = Events.onInputOption
 onFocusOption = Events.onFocusOption
 
-
-type alias Renderer obj msg = Events obj msg -> Type msg -> obj -> Html msg
 
 -- Index
 type alias Index = List Int
@@ -69,21 +74,6 @@ setDictIndexes parent subs =
             |> Dict.toList
             |> List.indexedMap updateSubIndex
             |> Dict.fromList
-
-
--- Mdl
-type alias Wrapper msg = Material.Msg msg -> msg
-
-
-type alias Type msg =
-    { mdl : Material.Model
-    , wrapper : Wrapper msg
-    , hacky_index_ : Int
-    }
-
-
-type alias Model m msg =
-    { m | mdl : Type msg }
 
 
 init : Wrapper msg -> Type msg
