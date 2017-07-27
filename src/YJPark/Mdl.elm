@@ -19,6 +19,9 @@ type alias Events obj msg = Types.Events obj msg
 
 
 -- Events
+wrapEvent = Events.wrapEvent
+wrapEvents = Events.wrapEvents
+
 noEvent = Events.null
 
 onClick = Events.onClick

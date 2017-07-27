@@ -25,6 +25,24 @@ null =
     }
 
 
+wrapEvent : (a -> b) -> (b -> x) -> (a -> x)
+wrapEvent converter event =
+    \b ->
+        event (converter b)
+
+
+
+wrapEvents : (a -> b) -> Type b msg -> Type a msg
+wrapEvents converter events =
+    let
+        wrapper = wrapEvent converter
+    in
+        { onClick = Maybe.map wrapper events.onClick
+        , onInput = Maybe.map wrapper events.onInput
+        , onFocus = Maybe.map wrapper events.onFocus
+        }
+
+
 onClick : OnClick obj msg -> Type obj msg -> Type obj msg
 onClick wrapper model =
     { model
