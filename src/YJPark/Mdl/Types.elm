@@ -28,3 +28,11 @@ type alias Events obj msg = Events.Type obj msg
 
 type alias Renderer obj msg = Events obj msg -> Type msg -> obj -> Html msg
 
+
+type alias Index = List Int
+
+
+type alias WithIndex m =
+    { m | index : Index }
+
+

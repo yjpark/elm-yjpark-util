@@ -33,12 +33,11 @@ onFocusOption = Events.onFocusOption
 
 
 -- Index
-type alias Index = List Int
+type alias Index = Types.Index
 noIndex = []
 
 
-type alias WithIndex m =
-    { m | index : Index }
+type alias WithIndex m = Types.WithIndex m
 
 
 updateIndex : Index -> WithIndex m -> WithIndex m

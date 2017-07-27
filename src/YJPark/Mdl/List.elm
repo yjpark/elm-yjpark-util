@@ -10,18 +10,18 @@ import Material.Options as Options exposing (when, css)
 import Material.Table as Table
 
 
-toList : Renderer obj msg -> Events obj msg -> Type msg -> List obj -> Html msg
-toList renderer events mdl objects =
+renderList : Renderer obj msg -> Events obj msg -> Type msg -> List obj -> Html msg
+renderList renderer events mdl objects =
     let
         items = objects
-            |> List.map (toListItem renderer events mdl)
+            |> List.map (renderListItem renderer events mdl)
     in
         Lists.ul
             [] items
 
 
-toListItem : Renderer obj msg -> Renderer obj msg
-toListItem renderer events mdl obj =
+renderListItem : Renderer obj msg -> Renderer obj msg
+renderListItem renderer events mdl obj =
     let
         attribs = case events.onClick of
             Nothing ->
