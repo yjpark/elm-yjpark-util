@@ -14,8 +14,12 @@ import Material.List as Lists
 import Material.Options as Options exposing (when, css)
 
 
--- label, value, icon, disabled, renderer
+-- label, value, icon, disabled
 type alias WithActionMeta = (String, String, String, Bool)
+
+
+-- label, value, color
+type alias AreaMeta = (String, String, Color.Color)
 
 
 renderTextfieldWithAction : WithActionMeta -> Int -> Renderer (WithIndex obj) msg
@@ -42,5 +46,24 @@ renderTextfieldWithAction (label, value, icon, disabled) index events mdl obj =
                 , Events.onClickOption events obj
                 ]
                 [ Icon.i icon ]
+            ]
+        ]
+
+
+renderTextareaWithDummyAction : AreaMeta -> Int -> Renderer (WithIndex obj) msg
+renderTextareaWithDummyAction (label, value, color) index events mdl obj =
+    Options.div []
+        [ Options.span []
+            [ Textfield.render mdl.wrapper (obj.index ++ [index, 0]) mdl.mdl
+                [ Textfield.label label
+                , Textfield.floatingLabel
+                , Color.text color
+                , Textfield.textarea
+                , Textfield.value value
+                ]
+                []
+            , Button.render mdl.wrapper (obj.index ++ [index, 1]) mdl.mdl
+                [ Button.icon ]
+                [ Icon.i "" ]
             ]
         ]

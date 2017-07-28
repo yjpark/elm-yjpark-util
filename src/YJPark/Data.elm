@@ -10,6 +10,11 @@ import Dict
 
 type alias Data = (Dict.Dict String Encode.Value)
 
+type alias WithData m =
+    { m
+    | data : Data
+    }
+
 
 empty : Data
 empty =
@@ -144,4 +149,22 @@ getStringWithDefault key =
 getValueWithDefault : String -> Value -> Data -> Value
 getValueWithDefault key =
     get True "getValueWithDefault" key identity
+
+
+updateData : Data -> WithData m -> WithData m
+updateData data model =
+    { model
+    | data = data
+    }
+
+
+setData : String -> Value -> WithData m -> WithData m
+setData key val model =
+    let
+        new_data = model.data
+            |> Dict.insert key val
+        _ = debug5 "Data.setData" model (toValue model.data) "->" (toValue new_data)
+    in
+        model
+            |> updateData new_data
 

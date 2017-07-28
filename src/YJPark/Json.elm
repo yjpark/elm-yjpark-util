@@ -11,6 +11,10 @@ type alias Value = Encode.Value
 null = Encode.null
 
 
+type alias WithJson m =
+    { m | json : Value }
+
+
 boolToValue : Bool -> Value
 boolToValue val =
     Encode.bool val
@@ -143,3 +147,8 @@ getValueWithDefault key =
     decode True "getValueWithDefault" (Decode.field key Decode.value)
 
 
+updateJson : Value -> WithJson m -> WithJson m
+updateJson json model =
+    { model
+    | json = json
+    }
