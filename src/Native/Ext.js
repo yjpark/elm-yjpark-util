@@ -31,9 +31,15 @@ function render_json_with_config(target, json, openDepth, config) {
   return html;
 }
 
+function open_url(url, name) {
+    window.open(url, name);
+}
+
+
 return {
   render_json: F3(render_json),
-  render_json_with_config: F4(render_json_with_config)
+  render_json_with_config: F4(render_json_with_config),
+  open_url: F2(open_url)
 };
 
 }();
