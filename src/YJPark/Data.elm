@@ -16,13 +16,6 @@ type alias WithData m =
     }
 
 
-type alias WithDataAndJson m =
-    { m
-    | data : Data
-    , json : Json.Value
-    }
-
-
 empty : Data
 empty =
     Dict.empty
