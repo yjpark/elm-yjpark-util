@@ -49,7 +49,6 @@ update msg model =
         ({model | weui = new_weui}, Cmd.map model.weui.wrapper cmd)
 
 
-view : (Model m msg -> Html msg) -> Model m msg -> Html msg
-view tab_renderer model =
-    TabBar.renderTabBar model.tabs
-        |> Html.map model.weui.wrapper
+view : Wrapper msg -> Html msg -> Model m msg -> Html msg
+view wrapper tab_content model =
+    TabBar.renderTabs wrapper tab_content model.weui.model.tabs model.weui.model.current_tab
