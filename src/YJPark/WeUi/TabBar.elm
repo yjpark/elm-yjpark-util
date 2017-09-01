@@ -1,45 +1,15 @@
-module YJPark.Weui.TabBar exposing (..)
-import YJPark.Mdl.Types exposing (..)
+module YJPark.WeUi.TabBar exposing (..)
+import YJPark.WeUi.Types exposing (..)
+import YJPark.WeUi.Model as Model
 
 import Html exposing (..)
+import Material.Options as Options exposing (when, css)
 
 import List
 
 
-type alias CellMeta obj msg = (String, Bool, Renderer obj msg) -- title, is_numeric renderer
-
-
-renderTable : List (CellMeta obj msg) -> Events obj msg -> Type msg -> List obj -> Html msg
-renderTable cells events mdl objects =
-    Table.table []
-        [ Table.thead []
-            [ Table.tr []
-                (cells
-                    |> List.map (\(title, is_numeric, _) ->
-                        case is_numeric of
-                            True ->
-                                Table.th [ Table.numeric ] [ text title ]
-                            False ->
-                                Table.th [] [ text title ]))
-            ]
-        , Table.tbody []
-            (objects
-                |> List.map (renderTableRow cells events mdl))
-        ]
-
-
-renderTableCell : CellMeta obj msg -> Renderer obj msg
-renderTableCell (title, is_numeric, renderer) events mdl obj =
-    case is_numeric of
-        True ->
-            Table.td [ Table.numeric ] [ renderer events mdl obj ]
-        False ->
-            Table.td [] [ renderer events mdl obj ]
-
-
-renderTableRow : List (CellMeta obj msg) -> Renderer obj msg
-renderTableRow cells events mdl obj =
-    Table.tr []
-        (cells
-            |> List.map (\cell -> renderTableCell cell events mdl obj))
-
+renderTabBar : Model.Tabs -> Html msg
+renderTabBar tabs =
+    Options.div []
+    (tabs
+        |> List.map (\t -> text t.title))

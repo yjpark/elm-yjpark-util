@@ -46,3 +46,9 @@ update msg model =
         new_weui = {weui | model = weui_model} --if use model.weui directly here, got compiler problem
     in
         ({model | weui = new_weui}, Cmd.map model.weui.wrapper cmd)
+
+
+view : Model m msg -> Html msg
+view model =
+    Logic.view model.weui.model
+        |> Html.map model.weui.wrapper
