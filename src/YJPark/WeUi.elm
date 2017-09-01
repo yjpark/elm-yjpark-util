@@ -3,6 +3,7 @@ import YJPark.Events as Events
 import YJPark.WeUi.Types as Types
 import YJPark.WeUi.Model as Model
 import YJPark.WeUi.Logic as Logic
+import YJPark.WeUi.TabBar as TabBar
 import YJPark.Util exposing (..)
 
 import Html exposing (Html)
@@ -48,7 +49,7 @@ update msg model =
         ({model | weui = new_weui}, Cmd.map model.weui.wrapper cmd)
 
 
-view : Model m msg -> Html msg
-view model =
-    Logic.view model.weui.model
+view : (Model m msg -> Html msg) -> Model m msg -> Html msg
+view tab_renderer model =
+    TabBar.renderTabBar model.tabs
         |> Html.map model.weui.wrapper
