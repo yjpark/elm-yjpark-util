@@ -1,6 +1,7 @@
 module YJPark.Mdl exposing (..)
 import YJPark.Mdl.Types as Types
-import YJPark.Mdl.Events as Events
+import YJPark.Events as Events
+import YJPark.Mdl.Events as MdlEvents
 
 import YJPark.Util exposing (..)
 import Native.Mdl
@@ -27,9 +28,9 @@ onClick = Events.onClick
 onInput = Events.onInput
 onFocus = Events.onFocus
 
-onClickOption = Events.onClickOption
-onInputOption = Events.onInputOption
-onFocusOption = Events.onFocusOption
+onClickOption = MdlEvents.onClickOption
+onInputOption = MdlEvents.onInputOption
+onFocusOption = MdlEvents.onFocusOption
 
 
 -- Index

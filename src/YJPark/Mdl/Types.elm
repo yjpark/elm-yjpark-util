@@ -1,5 +1,6 @@
 module YJPark.Mdl.Types exposing (..)
-import YJPark.Mdl.Events as Events
+import YJPark.Events as Events
+import YJPark.Mdl.Events as MdlEvents
 
 import YJPark.Util exposing (..)
 
