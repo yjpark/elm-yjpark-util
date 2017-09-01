@@ -9,6 +9,11 @@ import Html exposing (Html)
 
 
 -- Types
+type alias Tab = Model.Tab
+type alias Tabs = Model.Tabs
+
+type alias Msg = Types.Msg
+
 type alias Wrapper msg = Types.Wrapper msg
 type alias Type msg = Types.Type msg
 type alias Model m msg = Types.Model m msg
@@ -28,14 +33,16 @@ onFocus = Events.onFocus
 
 init : Wrapper msg -> Type msg
 init wrapper =
-    { weui = Model.null
+    { model = Model.null
     , wrapper = wrapper
     }
 
 
-update : Types.Msg -> Model m msg  -> (Model m msg, Cmd msg)
+update : Msg -> Model m msg  -> (Model m msg, Cmd msg)
 update msg model =
     let
-        (weui, cmd) = Logic.update msg model.weui
+        (weui_model, cmd) = Logic.update msg model.weui.model
+        weui = model.weui
+        new_weui = {weui | model = weui_model} --if use model.weui directly here, got compiler problem
     in
-        ({model | weui = weui}, Cmd.map model.weui.wrapper cmd)
+        ({model | weui = new_weui}, Cmd.map model.weui.wrapper cmd)

@@ -10,15 +10,16 @@ import Dict
 import Html exposing (Html)
 
 
-type Msg =
-    DoSwitchTab Int
+type Msg
+    = DoLoadTabs Model.Tabs
+    | DoSwitchTab Int
 
 
 type alias Wrapper msg = Msg -> msg
 
 
 type alias Type msg =
-    { weui : Model.Type
+    { model : Model.Type
     , wrapper : Wrapper msg
     }
 

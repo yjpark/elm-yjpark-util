@@ -1,9 +1,16 @@
 module YJPark.WeUi.Logic exposing (..)
 
+import YJPark.WeUi.Model as Model
 import YJPark.WeUi.Types exposing (..)
 
+import YJPark.Util exposing (..)
 
-update : Msg -> Type m -> (Type m, Cmd Msg)
+
+update : Msg -> Model.Type -> (Model.Type, Cmd Msg)
 update msg model =
-    (model, Cmd.none)
+    case msg of
+        DoLoadTabs tabs ->
+            ({model | tabs = tabs}, Cmd.none)
+        DoSwitchTab tab ->
+            ({model | current_tab = tab}, Cmd.none)
 
