@@ -41,6 +41,9 @@ renderTabItem wrapper current_tab index tab =
                 [ A.class "weui-tabbar__icon"
                 , A.src tab.image
                 ] []
-            , H.p [ A.class "weui-tabbar__label"]
+            , H.p
+                [ A.class "weui-tabbar__label"
+                , A.style [("margin-bottom", "0px")]
+                ]
                 [ H.text tab.title ]
             ]
