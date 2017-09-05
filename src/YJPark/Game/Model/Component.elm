@@ -6,8 +6,17 @@ import YJPark.Data exposing (..)
 import Game.TwoD.Render exposing (Renderable)
 
 
-type Type e msg = Component
+type Type g s e msg = Component
     { data : Data
-    , update : Maybe (Type e msg -> e -> (e, Cmd msg))
-    , render : Maybe (Type e msg -> e -> Renderable)
+    , tick : Maybe (g -> s -> e -> Type g s e msg -> (Type g s e msg, Cmd msg))
+    , render : Maybe (g -> s -> e -> Type g s e msg -> Renderable)
     }
+
+
+init : Data -> Type g s e msg
+init data = Component
+    { data = data
+    , tick = Nothing
+    , render = Nothing
+    }
+

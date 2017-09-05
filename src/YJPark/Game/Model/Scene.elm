@@ -8,31 +8,29 @@ import Game.TwoD.Camera as Camera exposing (Camera)
 import Keyboard.Extra
 
 
-type Type msg = Scene
-    { time : Float
-    , delta : Float
-    , frame : Int
-    , root : Entity.Type (Type msg) msg
+type alias Entity g msg = Entity.Type g (Type g msg) msg
+
+
+type Type g msg = Scene
+    { root : Entity g msg
     , camera : Camera
+    , tickers : List (g -> Type g msg -> (Type g msg, Cmd msg))
     }
 
 
-init : Camera -> Type msg
-init camera =
-    { time = 0
-    , delta = 0
-    , frame = 0
-    , root = Entity.new Nothing
-    , camera = Nothing --Camera.fixedWidth 8 ( 0, 0 )
+type alias SceneTicker g msg = g -> Type g msg -> (Type g msg, Cmd msg)
+
+
+init : Camera -> Type g msg
+init camera = Scene
+    { root = Entity.init Nothing ""
+    , camera = camera
+    , tickers = []
     }
 
 
-
-tickTime : Float -> Type msg -> Type msg
-tickTime delta (Scene scene) = Scene
+addTicker : SceneTicker g msg -> Type g msg -> Type g msg
+addTicker ticker (Scene scene) = Scene
     { scene
-    | time = scene.time + delta
-    , delta = delta
-    , frame = scene.frame + 1
+    | tickers = scene.tickers ++ [ticker]
     }
-
