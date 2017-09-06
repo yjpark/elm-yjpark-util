@@ -14,11 +14,11 @@ type Type g s msg = Entity
     , transform : Transform.Type
     , children : List (Type g s msg)
     , components : List (Component g s msg)
-    , tickers : List (g -> s -> Type g s msg -> (Type g s msg, Cmd msg))
+    , tickers : List (Ticker g s msg)
     }
 
 
-type alias EntityTicker g s msg = g -> s -> Type g s msg -> (Type g s msg, Cmd msg)
+type alias Ticker g s msg = g -> s -> Type g s msg -> (Type g s msg, Cmd msg)
 
 
 init : Maybe (Type g s msg) -> String -> Type g s msg
@@ -32,7 +32,7 @@ init parent key = Entity
     }
 
 
-addTicker : EntityTicker g s msg -> Type g s msg -> Type g s msg
+addTicker : Ticker g s msg -> Type g s msg -> Type g s msg
 addTicker ticker (Entity entity) = Entity
     { entity
     | tickers = entity.tickers ++ [ticker]

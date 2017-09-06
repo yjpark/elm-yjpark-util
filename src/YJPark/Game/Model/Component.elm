@@ -8,15 +8,35 @@ import Game.TwoD.Render exposing (Renderable)
 
 type Type g s e msg = Component
     { data : Data
-    , tick : Maybe (g -> s -> e -> Type g s e msg -> (Type g s e msg, Cmd msg))
-    , render : Maybe (g -> s -> e -> Type g s e msg -> Renderable)
+    , ticker : Maybe (Ticker g s e msg)
+    , renderer : Maybe (Renderer g s e msg)
     }
+
+
+type alias Ticker g s e msg = (g -> s -> e -> Type g s e msg -> (Type g s e msg, Cmd msg))
+type alias Renderer g s e msg = (g -> s -> e -> Type g s e msg -> Renderable)
 
 
 init : Data -> Type g s e msg
 init data = Component
     { data = data
-    , tick = Nothing
-    , render = Nothing
+    , ticker = Nothing
+    , renderer = Nothing
     }
+
+
+setTicker : Ticker g s e msg -> Type g s e msg -> Type g s e msg
+setTicker ticker (Component component) = Component
+    { component
+    | ticker = Just ticker
+    }
+
+
+setRenderer : Renderer g s e msg -> Type g s e msg -> Type g s e msg
+setRenderer renderer (Component component) = Component
+    { component
+    | renderer = Just renderer
+    }
+
+
 

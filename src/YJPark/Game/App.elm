@@ -1,16 +1,19 @@
 module YJPark.Game.App exposing (..)
 import YJPark.Game.Types as GameTypes exposing (..)
 import YJPark.Game.Model.Game as Game exposing (Type(..))
+import YJPark.Game.Model.Scene as Scene exposing (Type(..))
 
 import YJPark.Game.Logic.Scene as SceneLogic
 import YJPark.Game.Types exposing (..)
 
 import YJPark.Util exposing (..)
 
+import Game.TwoD as TwoDGame
 import Game.TwoD.Camera as Camera exposing (Camera)
 import Keyboard.Extra
 
 import Game.Resources as Resources
+import Html exposing (Html)
 
 
 type alias Model ext = GameTypes.Model ext
@@ -50,3 +53,17 @@ update msg (Game game) =
         ExtMsg _ ->
             (Game game) ! []
 
+
+renderScene : (Int, Int) -> Model ext -> Game.Scene (Msg ext) -> Html (Msg ext)
+renderScene size (Game game) (Scene scene) =
+    SceneLogic.render (Game game) (Scene scene)
+        |> TwoDGame.render
+            { size = size
+            , time = game.time
+            , camera = scene.camera
+            }
+
+
+render : (Int, Int) -> Model ext -> Html (Msg ext)
+render size (Game game) =
+    renderScene size (Game game) game.scene

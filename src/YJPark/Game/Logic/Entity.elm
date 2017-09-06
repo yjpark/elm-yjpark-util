@@ -1,7 +1,7 @@
 module YJPark.Game.Logic.Entity exposing (..)
-import YJPark.Game.Model.Game as Game exposing (Type(..))
-import YJPark.Game.Model.Scene as Scene exposing (Type(..), SceneTicker)
-import YJPark.Game.Model.Entity as Entity exposing (Type(..), EntityTicker)
+import YJPark.Game.Model.Game as Game exposing (Type(..), Game, Scene, Entity, Component, SceneTicker, EntityTicker)
+import YJPark.Game.Model.Scene as Scene exposing (Type(..))
+import YJPark.Game.Model.Entity as Entity exposing (Type(..))
 import YJPark.Game.Model.Component as Component exposing (Type(..))
 
 import YJPark.Util exposing (..)
@@ -11,7 +11,7 @@ import Game.TwoD.Render exposing (Renderable)
 
 import Keyboard.Extra
 
-tick : EntityTicker g s msg
+tick : EntityTicker msg
 tick game scene (Entity entity) =
     let
         fold = (\ticker (current_entity, current_cmds) ->
@@ -35,11 +35,11 @@ tick game scene (Entity entity) =
         (Entity result_with_children) ! ((List.reverse cmds) ++ components_cmds ++ children_cmds)
 
 
-tickComponents : g -> s -> (Entity.Type g s msg) -> (List (Entity.Component g s msg), List (Cmd msg))
+tickComponents : (Game msg) -> (Scene msg) -> (Entity msg) -> (List (Component msg), List (Cmd msg))
 tickComponents game scene (Entity entity) =
     entity.components
         |> List.map (\(Component component) ->
-            case component.tick of
+            case component.ticker of
                 Nothing ->
                     (Component component) ! []
                 Just ticker ->
@@ -48,14 +48,14 @@ tickComponents game scene (Entity entity) =
         |> List.unzip
 
 
-tickChildren : g -> s -> (Entity.Type g s msg) -> (List (Entity.Type g s msg), List (Cmd msg))
+tickChildren : (Game msg) -> (Scene msg) -> (Entity msg) -> (List (Entity msg), List (Cmd msg))
 tickChildren game scene (Entity entity) =
     entity.children
         |> List.map (\child -> tick game scene child)
         |> List.unzip
 
 
-render : g -> s -> (Entity.Type g s msg) -> List Renderable
+render : (Game msg) -> (Scene msg) -> (Entity msg) -> List Renderable
 render game scene entity =
     [ renderComponents game scene entity
     , renderChildren game scene entity
@@ -63,11 +63,11 @@ render game scene entity =
         |> List.concat
 
 
-renderComponents : g -> s -> (Entity.Type g s msg) -> List Renderable
+renderComponents : (Game msg) -> (Scene msg) -> (Entity msg) -> List Renderable
 renderComponents game scene (Entity entity) =
     entity.components
         |> List.map (\(Component component) ->
-            case component.render of
+            case component.renderer of
                 Nothing ->
                     []
                 Just renderer ->
@@ -76,7 +76,7 @@ renderComponents game scene (Entity entity) =
         |> List.concat
 
 
-renderChildren : g -> s -> (Entity.Type g s msg) -> List Renderable
+renderChildren : (Game msg) -> (Scene msg) -> (Entity msg) -> List Renderable
 renderChildren game scene (Entity entity) =
     entity.children
         |> List.map (\child -> render game scene child)

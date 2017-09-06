@@ -1,33 +1,69 @@
 module YJPark.Game.Model.Transform exposing (..)
 
 import YJPark.Util exposing (..)
-import YJPark.Json exposing (..)
+import YJPark.Data exposing (..)
 
 
-type alias Float2 =
-    ( Float, Float )
-
-
-type alias Int2 =
-    ( Int, Int )
-
-
-type alias Float3 =
-    ( Float, Float, Float )
+type alias Value =
+    { x : Float
+    , y : Float
+    , z : Float
+    , angle : Float
+    }
 
 
 type alias Type =
-    { local_pos : Float3
-    , local_angle : Float
-    , pos : Float3
-    , angle : Float
+    { local : Value
+    , world : Value
+    }
+
+
+zero : Value
+zero =
+    { x = 0
+    , y = 0
+    , z = 0
+    , angle = 0
     }
 
 
 null : Type
 null =
-    { local_pos = (0, 0, 0)
-    , local_angle = 0
-    , pos = (0, 0, 0)
-    , angle = 0
+    { local = zero
+    , world = zero
     }
+
+
+localToWorld : Type -> Type -> Type
+localToWorld parent transform =
+    let
+        world =
+            { x = parent.world.x + transform.local.x
+            , y = parent.world.y + transform.local.y
+            , z = parent.world.z + transform.local.z
+            , angle = parent.world.angle + transform.local.angle
+            }
+    in
+        { transform
+        | world = world
+        }
+
+
+worldToLocal : Type -> Type -> Type
+worldToLocal parent transform =
+    let
+        local =
+            { x = transform.world.x - parent.world.x
+            , y = transform.world.y - parent.world.y
+            , z = transform.world.z - parent.world.z
+            , angle = transform.world.angle - parent.world.angle
+            }
+    in
+        { transform
+        | local = local
+        }
+
+
+getPosition : Type -> (Float, Float, Float)
+getPosition transform =
+    (transform.world.x, transform.world.y, transform.world.z)

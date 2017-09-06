@@ -1,8 +1,8 @@
 module YJPark.Game.Logic.Scene exposing (..)
 import YJPark.Game.Logic.Entity as EntityLogic
 
-import YJPark.Game.Model.Game as Game exposing (Type(..))
-import YJPark.Game.Model.Scene as Scene exposing (Type(..), SceneTicker)
+import YJPark.Game.Model.Game as Game exposing (Type(..), Game, Scene, Entity, Component, SceneTicker, EntityTicker)
+import YJPark.Game.Model.Scene as Scene exposing (Type(..))
 
 import YJPark.Util exposing (..)
 
@@ -13,7 +13,7 @@ import Game.TwoD.Render exposing (Renderable)
 import Keyboard.Extra
 
 
-tick : SceneTicker g msg
+tick : SceneTicker msg
 tick game (Scene scene) =
     let
         fold = (\ticker (current_scene, current_cmds) ->
@@ -34,6 +34,6 @@ tick game (Scene scene) =
         (Scene {result | root = root}) ! (List.reverse cmds ++ [root_cmd])
 
 
-render : g -> Scene.Type g msg -> List Renderable
+render : Game msg -> Scene msg -> List Renderable
 render game (Scene scene) =
     EntityLogic.render game (Scene scene) scene.root
