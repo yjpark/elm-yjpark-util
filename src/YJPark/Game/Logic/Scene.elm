@@ -28,12 +28,24 @@ tick game (Scene scene) =
                 (next_scene, next_cmds)
         )
         (Scene result, cmds) = scene.tickers
-            |> List.foldl fold (Scene scene, [])
+            |> List.foldr fold (Scene scene, [])
         (root, root_cmd) = EntityLogic.tick game (Scene result) result.root
     in
-        (Scene {result | root = root}) ! (List.reverse cmds ++ [root_cmd])
+        (Scene {result | root = root}) ! (cmds ++ [root_cmd])
 
 
 render : Game msg -> Scene msg -> List Renderable
 render game (Scene scene) =
     EntityLogic.render game (Scene scene) scene.root
+
+
+traverseEntities : (Entity msg -> Maybe a) -> Scene msg -> List a
+traverseEntities handler (Scene scene) =
+    EntityLogic.traverseEntities handler scene.root
+
+
+traverseComponents : (Component msg -> Maybe a) -> Scene msg -> List a
+traverseComponents handler (Scene scene) =
+    EntityLogic.traverseComponents handler scene.root
+
+

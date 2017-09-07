@@ -67,3 +67,8 @@ worldToLocal parent transform =
 getPosition : Type -> (Float, Float, Float)
 getPosition transform =
     (transform.world.x, transform.world.y, transform.world.z)
+
+
+getRotation : Type -> Float
+getRotation transform =
+    transform.world.angle

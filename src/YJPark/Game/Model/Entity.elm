@@ -39,6 +39,16 @@ addTicker ticker (Entity entity) = Entity
     }
 
 
+getChildren : Type g s msg -> List (Type g s msg)
+getChildren (Entity entity) =
+    entity.children
+
+
+getComponents : Type g s msg -> List (Component g s msg)
+getComponents (Entity entity) =
+    entity.components
+
+
 getChild : String -> Type g s msg -> Maybe (Type g s msg)
 getChild key (Entity entity) =
     entity.children

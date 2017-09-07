@@ -1,10 +1,11 @@
 module YJPark.Game.App exposing (..)
 import YJPark.Game.Types as GameTypes exposing (..)
+import YJPark.Game.Builtin as Builtin
 import YJPark.Game.Model.Game as Game exposing (Type(..))
 import YJPark.Game.Model.Scene as Scene exposing (Type(..))
 
 import YJPark.Game.Logic.Scene as SceneLogic
-import YJPark.Game.Types exposing (..)
+import YJPark.Game.Component.Image as Image
 
 import YJPark.Util exposing (..)
 
@@ -25,6 +26,7 @@ type alias Msg ext = GameTypes.Msg ext
 init : Camera -> Model ext
 init camera =
     Game.init camera
+        |> Builtin.register
 
 
 tick : Float -> Model ext -> (Model ext, Cmd (Msg ext))
@@ -46,8 +48,11 @@ update msg (Game game) =
     case msg of
         DoTick delta ->
             tick delta (Game game)
-        DoLoadTextures urls ->
-            (Game game) ! []
+        DoLoadResources ->
+            (Game game) !
+                [ Resources.loadTextures (Image.gatherTextures game.scene)
+                    |> Cmd.map ResourceMsg
+                ]
         ResourceMsg msg_ ->
             (Game {game | resources = Resources.update msg_ game.resources}) ! []
         ExtMsg _ ->

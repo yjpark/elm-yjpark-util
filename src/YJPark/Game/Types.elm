@@ -7,7 +7,7 @@ import Game.Resources as Resources
 
 
 type Msg ext
-    = DoLoadTextures (List String)
+    = DoLoadResources
     | ResourceMsg Resources.Msg
     | DoTick Float
     | ExtMsg ext

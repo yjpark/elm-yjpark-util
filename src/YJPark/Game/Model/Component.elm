@@ -7,7 +7,8 @@ import Game.TwoD.Render exposing (Renderable)
 
 
 type Type g s e msg = Component
-    { data : Data
+    { kind : String
+    , data : Data
     , ticker : Maybe (Ticker g s e msg)
     , renderer : Maybe (Renderer g s e msg)
     }
@@ -17,9 +18,10 @@ type alias Ticker g s e msg = (g -> s -> e -> Type g s e msg -> (Type g s e msg,
 type alias Renderer g s e msg = (g -> s -> e -> Type g s e msg -> Renderable)
 
 
-init : Data -> Type g s e msg
-init data = Component
-    { data = data
+init : String -> Data -> Type g s e msg
+init kind data = Component
+    { kind = kind
+    , data = data
     , ticker = Nothing
     , renderer = Nothing
     }

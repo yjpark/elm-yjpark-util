@@ -1,4 +1,5 @@
 module YJPark.Game.Model.Game exposing (..)
+import YJPark.Game.Model.Registry as Registry
 import YJPark.Game.Model.Scene as Scene exposing (Type(..))
 import YJPark.Game.Model.Entity as Entity exposing (Type(..))
 import YJPark.Game.Model.Component as Component exposing (Type(..))
@@ -21,11 +22,14 @@ type alias Component msg = Component.Type (Type msg) (Scene msg) (Entity msg) ms
 type alias ComponentTicker msg = Component.Ticker (Type msg) (Scene msg) (Entity msg) msg
 type alias ComponentRenderer msg = Component.Renderer (Type msg) (Scene msg) (Entity msg) msg
 
+type alias Registry msg = Registry.Type (Type msg) msg
+
 
 type Type msg = Game
     { time : Float
     , delta : Float
     , frame : Int
+    , registry : Registry msg
     , resources : Resources
     , scene : Scene msg
     }
@@ -36,6 +40,7 @@ init camera = Game
     { time = 0
     , delta = 0
     , frame = 0
+    , registry = Registry.init
     , resources = Resources.init
     , scene = Scene.init camera
     }
