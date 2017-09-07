@@ -4,8 +4,11 @@ import YJPark.Game.Builtin as Builtin
 import YJPark.Game.Model.Game as Game exposing (Type(..))
 import YJPark.Game.Model.Scene as Scene exposing (Type(..))
 
+import YJPark.Game.Logic.Game as GameLogic
 import YJPark.Game.Logic.Scene as SceneLogic
 import YJPark.Game.Component.Image as Image
+
+import YJPark.Game.Meta.Scene as SceneMeta
 
 import YJPark.Util exposing (..)
 
@@ -43,6 +46,14 @@ tick delta (Game game) =
         (Game {result | scene = scene}) ! [cmd]
 
 
+loadScene : SceneMeta.Type -> Model ext -> (Model ext, Cmd (Msg ext))
+loadScene meta (Game game) =
+    let
+        scene = SceneLogic.load game.registry meta
+    in
+        (Game {game | scene = scene}) ! [toCmd <| DoLoadResources]
+
+
 update : Msg ext -> Model ext -> (Model ext, Cmd (Msg ext))
 update msg (Game game) =
     case msg of
@@ -57,6 +68,8 @@ update msg (Game game) =
                     [ Resources.loadTextures textures
                         |> Cmd.map ResourceMsg
                     ]
+        DoLoadScene meta ->
+            loadScene meta (Game game)
         ResourceMsg msg_ ->
             (Game {game | resources = Resources.update msg_ game.resources}) ! []
         ExtMsg _ ->

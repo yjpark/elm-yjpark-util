@@ -5,6 +5,8 @@ import YJPark.Game.Logic.Entity as EntityLogic
 import YJPark.Game.Model.Game as Game exposing (Type(..), Game, Scene, Entity, Component, SceneTicker, EntityTicker)
 import YJPark.Game.Model.Scene as Scene exposing (Type(..))
 
+import YJPark.Game.Meta.Scene as SceneMeta
+
 import YJPark.Util exposing (..)
 
 import Game.TwoD.Camera as Camera exposing (Camera)

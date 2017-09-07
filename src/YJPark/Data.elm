@@ -168,3 +168,8 @@ setData key val model =
         model
             |> updateData new_data
 
+
+merge : Data -> Data -> Data
+merge src model =
+    Dict.union src model
+

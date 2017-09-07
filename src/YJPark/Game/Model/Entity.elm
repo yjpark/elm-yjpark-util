@@ -9,8 +9,7 @@ type alias Component g s msg = Component.Type g s (Type g s msg) msg
 
 
 type Type g s msg = Entity
-    { parent : Maybe (Type g s msg)
-    , key : String
+    { key : String
     , transform : Transform.Type
     , children : List (Type g s msg)
     , components : List (Component g s msg)
@@ -18,13 +17,12 @@ type Type g s msg = Entity
     }
 
 
-type alias Ticker g s msg = g -> s -> Type g s msg -> (Type g s msg, Cmd msg)
+type alias Ticker g s msg = g -> s -> List (Type g s msg) -> Type g s msg -> (Type g s msg, Cmd msg)
 
 
-init : Maybe (Type g s msg) -> String -> Type g s msg
-init parent key = Entity
-    { parent = parent
-    , key = key
+init : String -> Type g s msg
+init key = Entity
+    { key = key
     , transform = Transform.null
     , children = []
     , components = []
@@ -56,16 +54,49 @@ getChild key (Entity entity) =
         |> List.head
 
 
-addChild : Type g s msg -> Type g s msg -> Type g s msg
-addChild (Entity child) (Entity entity) =
+insertOrAddChild : Bool -> Type g s msg -> Type g s msg -> Type g s msg
+insertOrAddChild insert (Entity child) (Entity entity) =
     case getChild child.key (Entity entity) of
-        Nothing -> Entity
-            { entity
-            | children = entity.children ++ [(Entity child)]
-            }
+        Nothing ->
+            let
+                new_child = (Entity child)
+                    |> setTransformParent entity.transform.world
+                children = case insert of
+                    True ->
+                        new_child :: entity.children
+                    False ->
+                        entity.children ++ [new_child]
+            in Entity
+                { entity
+                | children = children
+                }
         Just exist_child ->
-            let _ = error4 "Entity.addChild Failed, Already Exist:" exist_child "->" child in
-            Entity entity
+            let
+                msg = case insert of
+                    True ->
+                        "insertChild"
+                    False ->
+                        "addChild"
+                _ = error6 "[Entity]" msg "Failed: Already Exist:" exist_child "->" child
+            in Entity
+                entity
+
+
+insertChild : Type g s msg -> Type g s msg -> Type g s msg
+insertChild =
+    insertOrAddChild True
+
+
+addChild : Type g s msg -> Type g s msg -> Type g s msg
+addChild =
+    insertOrAddChild False
+
+
+insertComponent : (Component.Type g s (Type g s msg) msg) -> Type g s msg -> Type g s msg
+insertComponent component (Entity entity) = Entity
+    { entity
+    | components = component :: entity.components
+    }
 
 
 addComponent : (Component.Type g s (Type g s msg) msg) -> Type g s msg -> Type g s msg
@@ -74,4 +105,37 @@ addComponent component (Entity entity) = Entity
     | components = entity.components ++ [component]
     }
 
+
+setTransformParent : Transform.Value -> Type g s msg -> Type g s msg
+setTransformParent parent (Entity entity) = Entity
+    { entity
+    | transform = Transform.setParent parent entity.transform
+    }
+
+
+updateChildrenTransform : Type g s msg -> Type g s msg
+updateChildrenTransform (Entity entity) =
+    let
+        children = entity.children
+            |> List.map (setTransformParent entity.transform.world)
+    in Entity
+        { entity
+        | children = children
+        }
+
+
+setTransformLocal : Transform.Value -> Type g s msg -> Type g s msg
+setTransformLocal local (Entity entity) = Entity
+    { entity
+    | transform = Transform.setLocal local entity.transform
+    }
+        |> updateChildrenTransform
+
+
+setTransformWorld : Transform.Value -> Type g s msg -> Type g s msg
+setTransformWorld world (Entity entity) = Entity
+    { entity
+    | transform = Transform.setWorld world entity.transform
+    }
+        |> updateChildrenTransform
 

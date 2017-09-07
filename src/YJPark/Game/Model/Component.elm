@@ -1,7 +1,7 @@
 module YJPark.Game.Model.Component exposing (..)
 
 import YJPark.Util exposing (..)
-import YJPark.Data exposing (..)
+import YJPark.Data as Data exposing (Data)
 
 import Game.TwoD.Render exposing (Renderable)
 
@@ -14,8 +14,8 @@ type Type g s e msg = Component
     }
 
 
-type alias Ticker g s e msg = (g -> s -> e -> Type g s e msg -> (Type g s e msg, Cmd msg))
-type alias Renderer g s e msg = (g -> s -> e -> Type g s e msg -> Renderable)
+type alias Ticker g s e msg = (g -> s -> List e -> e -> Type g s e msg -> (Type g s e msg, Cmd msg))
+type alias Renderer g s e msg = (g -> s -> List e -> e -> Type g s e msg -> Renderable)
 
 
 init : String -> Data -> Type g s e msg

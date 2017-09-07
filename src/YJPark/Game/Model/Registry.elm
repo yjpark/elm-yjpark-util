@@ -8,6 +8,8 @@ import YJPark.Data as Data exposing (Data)
 
 import Dict exposing (Dict)
 
+import Game.TwoD.Camera as Camera exposing (Camera)
+
 
 type alias Component g msg = Component.Type g (Scene.Type g msg) (Scene.Entity g msg) msg
 
@@ -24,14 +26,26 @@ init =
 
 
 registerComponent : String -> (Data -> Component g msg) -> Type g msg -> Type g msg
-registerComponent kind initer model =
+registerComponent kind spawner model =
     case Dict.get kind model.components of
         Nothing ->
             let
                 components = model.components
-                    |> Dict.insert kind initer
+                    |> Dict.insert kind spawner
+                _ = info3 "[Registry] registerComponent Succeed:" kind spawner
             in
                 {model | components = components}
         Just exist ->
-            let _ = error6 "registerComponent Failed: Already Exist:" kind ":" exist "->" initer in
+            let _ = error6 "[Registry] registerComponent Failed: Already Exist:" kind ":" exist "->" spawner in
             model
+
+
+spawnComponent : String -> Data -> Type g msg -> Maybe (Component g msg)
+spawnComponent kind data model =
+    case Dict.get kind model.components of
+        Nothing ->
+            let _ = error3 "[Registry] spawnComponent Failed: Not Registered:" kind data in
+            Nothing
+        Just spawner ->
+            Just <| spawner data
+

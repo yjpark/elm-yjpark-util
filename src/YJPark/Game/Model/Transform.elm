@@ -1,66 +1,74 @@
 module YJPark.Game.Model.Transform exposing (..)
+import YJPark.Game.Meta.Transform as TransformMeta
 
 import YJPark.Util exposing (..)
-import YJPark.Data exposing (..)
 
 
-type alias Value =
-    { x : Float
-    , y : Float
-    , z : Float
-    , angle : Float
-    }
+type alias Value = TransformMeta.Type
+
+zero = TransformMeta.zero
 
 
 type alias Type =
-    { local : Value
+    { parent : Value
+    , local : Value
     , world : Value
-    }
-
-
-zero : Value
-zero =
-    { x = 0
-    , y = 0
-    , z = 0
-    , angle = 0
     }
 
 
 null : Type
 null =
-    { local = zero
+    { parent = zero
+    , local = zero
     , world = zero
     }
 
 
-localToWorld : Type -> Type -> Type
-localToWorld parent transform =
+setParent : Value -> Type -> Type
+setParent parent transform =
     let
         world =
-            { x = parent.world.x + transform.local.x
-            , y = parent.world.y + transform.local.y
-            , z = parent.world.z + transform.local.z
-            , angle = parent.world.angle + transform.local.angle
+            { x = parent.x + transform.local.x
+            , y = parent.y + transform.local.y
+            , z = parent.z + transform.local.z
+            , angle = parent.angle + transform.local.angle
             }
     in
         { transform
-        | world = world
+        | parent = parent
+        , world = world
         }
 
 
-worldToLocal : Type -> Type -> Type
-worldToLocal parent transform =
+setLocal : Value -> Type -> Type
+setLocal local transform =
     let
-        local =
-            { x = transform.world.x - parent.world.x
-            , y = transform.world.y - parent.world.y
-            , z = transform.world.z - parent.world.z
-            , angle = transform.world.angle - parent.world.angle
+        world =
+            { x = transform.parent.x + local.x
+            , y = transform.parent.y + local.y
+            , z = transform.parent.z + local.z
+            , angle = transform.parent.angle + local.angle
             }
     in
         { transform
         | local = local
+        , world = world
+        }
+
+
+setWorld : Value -> Type -> Type
+setWorld world transform =
+    let
+        local =
+            { x = world.x - transform.parent.x
+            , y = world.y - transform.parent.y
+            , z = world.z - transform.parent.z
+            , angle = world.angle - transform.parent.angle
+            }
+    in
+        { transform
+        | local = local
+        , world = world
         }
 
 

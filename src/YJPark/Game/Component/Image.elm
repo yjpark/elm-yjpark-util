@@ -1,8 +1,11 @@
 module YJPark.Game.Component.Image exposing (..)
+import YJPark.Game.Consts exposing (..)
 import YJPark.Game.Model.Game as Game exposing (Type(..))
 import YJPark.Game.Model.Entity as Entity exposing (Type(..))
 import YJPark.Game.Model.Component as Component exposing (Type(..))
 import YJPark.Game.Model.Transform as Transform
+
+import YJPark.Game.Meta.Component as ComponentMeta
 
 import YJPark.Game.Logic.Game as GameLogic
 import YJPark.Game.Logic.Scene as SceneLogic
@@ -15,26 +18,21 @@ import WebGL.Texture as Texture exposing (Texture)
 import Color
 
 
-kind = "Image"
-
-key_texture = "texture"
-key_width = "width"
-key_height = "height"
-key_pivot_x = "pivot_x"
-key_pivot_y = "pivot_y"
-
-
-default =
+data : String -> (Float, Float) -> (Float, Float) -> Data
+data t (w, h) (px, py) =
     Data.empty
-        |> Data.insertString key_texture ""
-        |> Data.insertFloat key_width 0
-        |> Data.insertFloat key_height 0
-        |> Data.insertFloat key_pivot_x 0
-        |> Data.insertFloat key_pivot_y 0
+        |> Data.insertString key_texture t
+        |> Data.insertFloat key_width w
+        |> Data.insertFloat key_height h
+        |> Data.insertFloat key_pivot_x px
+        |> Data.insertFloat key_pivot_y py
+
+
+default = data "" (0, 0) (0.5, 0.5)
 
 
 render : Game.ComponentRenderer msg
-render game scene (Entity entity) (Component component) =
+render game scene ancestors (Entity entity) (Component component) =
     let
         t = Data.getString key_texture component.data
         w = Data.getFloat key_width component.data
@@ -55,38 +53,45 @@ render game scene (Entity entity) (Component component) =
 
 initWithData : Data -> Game.Component msg
 initWithData data =
-    Component.init kind data
+    default
+        |> Data.merge data
+        |> Component.init kind_Image
         |> Component.setRenderer render
 
 
-init : String -> Float -> Float -> Float -> Float -> Game.Component msg
-init t w h px py=
-    default
-        |> Data.insertString key_texture t
-        |> Data.insertFloat key_width w
-        |> Data.insertFloat key_height h
-        |> Data.insertFloat key_pivot_x px
-        |> Data.insertFloat key_pivot_y py
+metaWithPivot : String -> (Float, Float) -> (Float, Float) -> ComponentMeta.Type
+metaWithPivot t (w, h) (px, py) =
+    { kind = kind_Image
+    , data = data t (w, h) (px, py)
+    }
+
+
+initWithPivot : String -> (Float, Float) -> (Float, Float) -> Game.Component msg
+initWithPivot t (w, h) (px, py) =
+    data t (w, h) (px, py)
         |> initWithData
 
 
-initTWH : String -> Float -> Float -> Game.Component msg
-initTWH t w h =
-    init t w h 0.5 0.5
+meta : String -> (Float, Float) -> ComponentMeta.Type
+meta t (w, h) =
+    metaWithPivot t (w, h) (0.5, 0.5)
+
+
+init : String -> (Float, Float) -> Game.Component msg
+init t (w, h) =
+    initWithPivot t (w, h) (0.5, 0.5)
 
 
 gatherTextures : Game.Scene msg -> List String
 gatherTextures =
     SceneLogic.traverseComponents (\(Component component) ->
-            let
-                texture = component.data
-                    |> Data.getString key_texture
-            in
-                case (texture == "") of
-                    True ->
-                        Nothing
-                    False ->
-                        Just texture
-        )
-
-
+        let
+            texture = component.data
+                |> Data.getString key_texture
+        in
+            case (texture == "") of
+                True ->
+                    Nothing
+                False ->
+                    Just texture
+    )
