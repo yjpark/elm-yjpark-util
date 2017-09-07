@@ -23,9 +23,9 @@ type alias Model ext = GameTypes.Model ext
 type alias Msg ext = GameTypes.Msg ext
 
 
-init : Camera -> Model ext
-init camera =
-    Game.init camera
+init : String -> Camera -> Model ext
+init base_url camera =
+    Game.init base_url camera
         |> Builtin.register
 
 
@@ -49,10 +49,14 @@ update msg (Game game) =
         DoTick delta ->
             tick delta (Game game)
         DoLoadResources ->
-            (Game game) !
-                [ Resources.loadTextures (Image.gatherTextures game.scene)
-                    |> Cmd.map ResourceMsg
-                ]
+            let
+                textures = Image.gatherTextures game.scene
+                    |> List.map (\u -> game.base_url ++ u)
+            in
+                (Game game) !
+                    [ Resources.loadTextures textures
+                        |> Cmd.map ResourceMsg
+                    ]
         ResourceMsg msg_ ->
             (Game {game | resources = Resources.update msg_ game.resources}) ! []
         ExtMsg _ ->

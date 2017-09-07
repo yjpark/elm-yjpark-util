@@ -18,4 +18,4 @@ import Keyboard.Extra
 
 getTexture : String -> Game msg -> Maybe Texture
 getTexture texture (Game game) =
-    Resources.getTexture texture game.resources
+    Resources.getTexture (game.base_url ++ texture) game.resources

@@ -30,17 +30,19 @@ type Type msg = Game
     , delta : Float
     , frame : Int
     , registry : Registry msg
+    , base_url : String
     , resources : Resources
     , scene : Scene msg
     }
 
 
-init : Camera -> Type msg
-init camera = Game
+init : String -> Camera -> Type msg
+init base_url camera = Game
     { time = 0
     , delta = 0
     , frame = 0
     , registry = Registry.init
+    , base_url = base_url
     , resources = Resources.init
     , scene = Scene.init camera
     }
