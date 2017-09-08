@@ -89,3 +89,12 @@ xyza x y z a =
     , z = z
     , angle = a
     }
+
+
+add : Type -> Type -> Type
+add a b =
+    { x = a.x + b.x
+    , y = a.y + b.y
+    , z = a.z + b.z
+    , angle = a.angle + b.angle
+    }
