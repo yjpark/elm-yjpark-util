@@ -34,17 +34,12 @@ render game scene ancestors (Entity entity) (Component component) =
             [renderer game scene ancestors (Entity entity) (Component component)]
 
 
-load : Registry msg -> ComponentMeta.Type -> Maybe (Component msg)
+load : Registry msg -> ComponentMeta.Type -> Component msg
 load registry meta =
-    registry
-        |> Registry.spawnComponent meta.kind meta.data
+    Component.initWithData meta.kind meta.data
+        |> Registry.setupComponent registry
 
 
-insert : Maybe (Component msg) -> Entity msg -> Entity msg
+insert : Component msg -> Entity msg -> Entity msg
 insert component entity =
-    case component of
-        Nothing ->
-            entity
-        Just component ->
-            Entity.insertComponent component entity
-
+    Entity.insertComponent component entity

@@ -9,11 +9,8 @@ import YJPark.Game.Component.Image as Image
 import YJPark.Util exposing (..)
 
 
-register : Model ext -> Model ext
-register (Game game) =
-    let
-        registry = game.registry
-            |> Registry.registerComponent kind_Image Image.initWithData
-    in
-        Game {game | registry = registry}
+registry : Game.Registry msg
+registry =
+    Registry.empty
+        |> Registry.registerComponent kind_Image Image.setup
 

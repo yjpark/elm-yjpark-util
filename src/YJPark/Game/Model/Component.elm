@@ -32,6 +32,11 @@ init key =
     initWithData key Data.empty
 
 
+setData : Data -> Type g s e msg -> Type g s e msg
+setData data (Component component) = Component
+    (Data.setData data component)
+
+
 setTicker : Ticker g s e msg -> Type g s e msg -> Type g s e msg
 setTicker ticker (Component component) = Component
     { component

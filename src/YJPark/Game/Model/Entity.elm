@@ -10,7 +10,8 @@ type alias Component g s msg = Component.Type g s (Type g s msg) msg
 
 
 type Type g s msg = Entity
-    { key : String
+    { kind : String
+    , key : String
     , data : Data
     , transform : Transform.Type
     , components : List (Component g s msg)
@@ -22,9 +23,10 @@ type Type g s msg = Entity
 type alias Ticker g s msg = g -> s -> List (Type g s msg) -> Type g s msg -> (Type g s msg, Cmd msg)
 
 
-initWithData : String -> Data -> Type g s msg
-initWithData key data = Entity
-    { key = key
+initWithData : String -> String -> Data -> Type g s msg
+initWithData kind key data = Entity
+    { kind = kind
+    , key = key
     , data = data
     , transform = Transform.null
     , components = []
@@ -33,9 +35,14 @@ initWithData key data = Entity
     }
 
 
-init : String -> Type g s msg
-init key =
-    initWithData key Data.empty
+init : String -> String -> Type g s msg
+init kind key =
+    initWithData kind key Data.empty
+
+
+setData : Data -> Type g s msg -> Type g s msg
+setData data (Entity entity) = Entity
+    (Data.setData data entity)
 
 
 addTicker : Ticker g s msg -> Type g s msg -> Type g s msg

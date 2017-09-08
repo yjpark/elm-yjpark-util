@@ -3,6 +3,7 @@ import YJPark.Game.Types as GameTypes exposing (..)
 import YJPark.Game.Builtin as Builtin
 import YJPark.Game.Model.Game as Game exposing (Type(..))
 import YJPark.Game.Model.Scene as Scene exposing (Type(..))
+import YJPark.Game.Model.Registry as Registry
 
 import YJPark.Game.Logic.Game as GameLogic
 import YJPark.Game.Logic.Scene as SceneLogic
@@ -26,10 +27,16 @@ type alias Model ext = GameTypes.Model ext
 type alias Msg ext = GameTypes.Msg ext
 
 
-init : String -> Model ext
-init base_url =
-    Game.init base_url
-        |> Builtin.register
+init : String -> GameTypes.Registry ext -> Model ext
+init base_url extra =
+    let
+        (Game game) = Game.init base_url
+        registry = Builtin.registry
+            |> Registry.merge extra
+    in Game
+        { game
+        | registry = registry
+        }
 
 
 tick : Float -> Model ext -> (Model ext, Cmd (Msg ext))

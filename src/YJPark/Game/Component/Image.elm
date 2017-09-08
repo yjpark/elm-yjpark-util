@@ -51,6 +51,12 @@ render game scene ancestors (Entity entity) (Component component) =
             }
 
 
+setup : Game.Component msg -> Game.Component msg
+setup component =
+    component
+        |> Component.setRenderer render
+
+
 initWithData : Data -> Game.Component msg
 initWithData data =
     default

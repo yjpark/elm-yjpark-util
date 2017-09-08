@@ -151,22 +151,22 @@ getValueWithDefault key =
     get True "getValueWithDefault" key identity
 
 
-updateData : Data -> WithData m -> WithData m
-updateData data model =
+setData : Data -> WithData m -> WithData m
+setData data model =
     { model
     | data = data
     }
 
 
-setData : String -> Value -> WithData m -> WithData m
-setData key val model =
+updateData : String -> Value -> WithData m -> WithData m
+updateData key val model =
     let
         new_data = model.data
             |> Dict.insert key val
         _ = debug5 "Data.setData" model (toValue model.data) "->" (toValue new_data)
     in
         model
-            |> updateData new_data
+            |> setData new_data
 
 
 merge : Data -> Data -> Data

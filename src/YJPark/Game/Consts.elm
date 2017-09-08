@@ -1,6 +1,8 @@
 module YJPark.Game.Consts exposing (..)
 
 
+kind_Entity = "Entity"
+
 kind_Image = "Image"
 
 

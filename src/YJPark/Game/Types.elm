@@ -1,5 +1,6 @@
 module YJPark.Game.Types exposing (..)
 import YJPark.Game.Model.Game as Game exposing (Type(..))
+import YJPark.Game.Model.Registry as Registry
 
 import YJPark.Game.Meta.Scene as SceneMeta
 import YJPark.Game.Meta.Camera as CameraMeta
@@ -15,6 +16,8 @@ type alias SceneMeta = SceneMeta.Type
 type alias CameraMeta = CameraMeta.Type
 type alias EntityMeta = EntityMeta.Type
 type alias TransformMeta = TransformMeta.Type
+
+type alias Registry ext = Game.Registry (Msg ext)
 
 
 type Msg ext

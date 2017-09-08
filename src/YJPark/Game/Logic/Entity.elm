@@ -5,6 +5,7 @@ import YJPark.Game.Model.Game as Game exposing (Type(..), Game, Scene, Entity, C
 import YJPark.Game.Model.Scene as Scene exposing (Type(..))
 import YJPark.Game.Model.Entity as Entity exposing (Type(..))
 import YJPark.Game.Model.Component as Component exposing (Type(..))
+import YJPark.Game.Model.Registry as Registry
 
 import YJPark.Game.Meta.Entity as EntityMeta exposing (Type(..))
 
@@ -116,7 +117,8 @@ traverseComponents handler (Entity entity) =
 load : Registry msg -> EntityMeta.Type -> Entity msg
 load registry (EntityMeta meta) =
     let
-        entity = Entity.init meta.key
+        entity = Entity.initWithData meta.kind meta.key meta.data
+            |> Registry.setupEntity registry
         with_components = meta.components
             |> List.map (ComponentLogic.load registry)
             |> List.foldr ComponentLogic.insert entity

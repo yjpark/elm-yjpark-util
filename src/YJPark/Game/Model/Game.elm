@@ -24,6 +24,8 @@ type alias ComponentTicker msg = Component.Ticker (Type msg) (Scene msg) (Entity
 type alias ComponentRenderer msg = Component.Renderer (Type msg) (Scene msg) (Entity msg) msg
 
 type alias Registry msg = Registry.Type (Type msg) msg
+type alias EntitySetup msg = Registry.EntitySetup (Type msg) msg
+type alias ComponentSetup msg = Registry.ComponentSetup (Type msg) msg
 
 
 type Type msg = Game
@@ -43,7 +45,7 @@ initWithData base_url data = Game
     { time = 0
     , delta = 0
     , frame = 0
-    , registry = Registry.init
+    , registry = Registry.empty
     , base_url = base_url
     , resources = Resources.init
     , data = data

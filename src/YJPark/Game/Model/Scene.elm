@@ -26,7 +26,7 @@ initWithData : Camera -> Data -> Type g msg
 initWithData camera data = Scene
     { camera = camera
     , data = data
-    , root = Entity.init ""
+    , root = Entity.init "" ""
     , tickers = []
     }
 
