@@ -13,8 +13,8 @@ type Type g s msg = Entity
     { key : String
     , data : Data
     , transform : Transform.Type
-    , children : List (Type g s msg)
     , components : List (Component g s msg)
+    , children : List (Type g s msg)
     , tickers : List (Ticker g s msg)
     }
 
@@ -27,8 +27,8 @@ initWithData key data = Entity
     { key = key
     , data = data
     , transform = Transform.null
-    , children = []
     , components = []
+    , children = []
     , tickers = []
     }
 
