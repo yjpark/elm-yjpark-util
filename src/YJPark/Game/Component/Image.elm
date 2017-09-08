@@ -55,7 +55,7 @@ initWithData : Data -> Game.Component msg
 initWithData data =
     default
         |> Data.merge data
-        |> Component.init kind_Image
+        |> Component.initWithData kind_Image
         |> Component.setRenderer render
 
 

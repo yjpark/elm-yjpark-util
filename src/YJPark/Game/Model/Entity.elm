@@ -3,6 +3,7 @@ import YJPark.Game.Model.Component as Component
 import YJPark.Game.Model.Transform as Transform
 
 import YJPark.Util exposing (..)
+import YJPark.Data as Data exposing (Data)
 
 
 type alias Component g s msg = Component.Type g s (Type g s msg) msg
@@ -10,6 +11,7 @@ type alias Component g s msg = Component.Type g s (Type g s msg) msg
 
 type Type g s msg = Entity
     { key : String
+    , data : Data
     , transform : Transform.Type
     , children : List (Type g s msg)
     , components : List (Component g s msg)
@@ -20,14 +22,20 @@ type Type g s msg = Entity
 type alias Ticker g s msg = g -> s -> List (Type g s msg) -> Type g s msg -> (Type g s msg, Cmd msg)
 
 
-init : String -> Type g s msg
-init key = Entity
+initWithData : String -> Data -> Type g s msg
+initWithData key data = Entity
     { key = key
+    , data = data
     , transform = Transform.null
     , children = []
     , components = []
     , tickers = []
     }
+
+
+init : String -> Type g s msg
+init key =
+    initWithData key Data.empty
 
 
 addTicker : Ticker g s msg -> Type g s msg -> Type g s msg

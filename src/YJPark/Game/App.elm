@@ -26,9 +26,9 @@ type alias Model ext = GameTypes.Model ext
 type alias Msg ext = GameTypes.Msg ext
 
 
-init : String -> Camera -> Model ext
-init base_url camera =
-    Game.init base_url camera
+init : String -> Model ext
+init base_url =
+    Game.init base_url
         |> Builtin.register
 
 

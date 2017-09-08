@@ -5,6 +5,7 @@ import YJPark.Game.Model.Entity as Entity exposing (Type(..))
 import YJPark.Game.Model.Component as Component exposing (Type(..))
 
 import YJPark.Util exposing (..)
+import YJPark.Data as Data exposing (Data)
 
 import Game.Resources as Resources exposing (Resources)
 import Game.TwoD.Camera as Camera exposing (Camera)
@@ -32,20 +33,27 @@ type Type msg = Game
     , registry : Registry msg
     , base_url : String
     , resources : Resources
+    , data : Data
     , scene : Scene msg
     }
 
 
-init : String -> Camera -> Type msg
-init base_url camera = Game
+initWithData : String -> Data -> Type msg
+initWithData base_url data = Game
     { time = 0
     , delta = 0
     , frame = 0
     , registry = Registry.init
     , base_url = base_url
     , resources = Resources.init
-    , scene = Scene.init camera
+    , data = data
+    , scene = Scene.null
     }
+
+
+init : String -> Type msg
+init base_url =
+    initWithData base_url Data.empty
 
 
 setScene : Scene msg  -> Type msg -> Type msg

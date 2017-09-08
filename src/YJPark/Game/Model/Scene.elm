@@ -2,6 +2,7 @@ module YJPark.Game.Model.Scene exposing (..)
 import YJPark.Game.Model.Entity as Entity
 
 import YJPark.Util exposing (..)
+import YJPark.Data as Data exposing (Data)
 
 import Game.TwoD.Camera as Camera exposing (Camera)
 import Keyboard.Extra
@@ -11,8 +12,9 @@ type alias Entity g msg = Entity.Type g (Type g msg) msg
 
 
 type Type g msg = Scene
-    { root : Entity g msg
-    , camera : Camera
+    { camera : Camera
+    , data : Data
+    , root : Entity g msg
     , tickers : List (Ticker g msg)
     }
 
@@ -20,12 +22,23 @@ type Type g msg = Scene
 type alias Ticker g msg = g -> Type g msg -> (Type g msg, Cmd msg)
 
 
-init : Camera -> Type g msg
-init camera = Scene
-    { root = Entity.init ""
-    , camera = camera
+initWithData : Camera -> Data -> Type g msg
+initWithData camera data = Scene
+    { camera = camera
+    , data = data
+    , root = Entity.init ""
     , tickers = []
     }
+
+
+init : Camera -> Type g msg
+init camera =
+    initWithData camera Data.empty
+
+
+null : Type g msg
+null =
+    init <| Camera.fixedWidth 256 (0, 0)
 
 
 addTicker : Ticker g msg -> Type g msg -> Type g msg

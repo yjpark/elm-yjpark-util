@@ -18,13 +18,18 @@ type alias Ticker g s e msg = (g -> s -> List e -> e -> Type g s e msg -> (Type 
 type alias Renderer g s e msg = (g -> s -> List e -> e -> Type g s e msg -> Renderable)
 
 
-init : String -> Data -> Type g s e msg
-init kind data = Component
+initWithData : String -> Data -> Type g s e msg
+initWithData kind data = Component
     { kind = kind
     , data = data
     , ticker = Nothing
     , renderer = Nothing
     }
+
+
+init : String -> Type g s e msg
+init key =
+    initWithData key Data.empty
 
 
 setTicker : Ticker g s e msg -> Type g s e msg -> Type g s e msg

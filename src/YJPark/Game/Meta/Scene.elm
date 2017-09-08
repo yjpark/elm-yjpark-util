@@ -8,5 +8,6 @@ import YJPark.Data as Data exposing (Data)
 
 type alias Type =
     { camera : Camera.Type
+    , data : Data
     , root : Entity.Type
     }
