@@ -5,7 +5,7 @@ import YJPark.Game.Model.Entity as Entity exposing (Type(..))
 import YJPark.Game.Model.Component as Component exposing (Type(..))
 
 import YJPark.Util exposing (..)
-import YJPark.Data as Data exposing (Data)
+import YJPark.Data as Data exposing (Data, Value)
 
 import Game.Resources as Resources exposing (Resources)
 import Game.TwoD.Camera as Camera exposing (Camera)
@@ -56,6 +56,16 @@ initWithData base_url data = Game
 init : String -> Type msg
 init base_url =
     initWithData base_url Data.empty
+
+
+setData : Data -> Type msg -> Type msg
+setData data (Game game) = Game
+    (Data.setData data game)
+
+
+updateData : String -> Value -> Type msg -> Type msg
+updateData key val (Game game) = Game
+    (Data.updateData key val game)
 
 
 setScene : Scene msg  -> Type msg -> Type msg

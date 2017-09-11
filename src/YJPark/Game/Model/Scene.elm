@@ -2,7 +2,7 @@ module YJPark.Game.Model.Scene exposing (..)
 import YJPark.Game.Model.Entity as Entity
 
 import YJPark.Util exposing (..)
-import YJPark.Data as Data exposing (Data)
+import YJPark.Data as Data exposing (Data, Value)
 
 import Game.TwoD.Camera as Camera exposing (Camera)
 import Keyboard.Extra
@@ -39,6 +39,16 @@ init camera =
 null : Type g msg
 null =
     init <| Camera.fixedWidth 256 (0, 0)
+
+
+setData : Data -> Type g msg -> Type g msg
+setData data (Scene scene) = Scene
+    (Data.setData data scene)
+
+
+updateData : String -> Value -> Type g msg -> Type g msg
+updateData key val (Scene scene) = Scene
+    (Data.updateData key val scene)
 
 
 addTicker : Ticker g msg -> Type g msg -> Type g msg

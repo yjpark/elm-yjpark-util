@@ -3,7 +3,7 @@ import YJPark.Game.Model.Component as Component
 import YJPark.Game.Model.Transform as Transform
 
 import YJPark.Util exposing (..)
-import YJPark.Data as Data exposing (Data)
+import YJPark.Data as Data exposing (Data, Value)
 
 
 type alias Component g s msg = Component.Type g s (Type g s msg) msg
@@ -43,6 +43,11 @@ init kind key =
 setData : Data -> Type g s msg -> Type g s msg
 setData data (Entity entity) = Entity
     (Data.setData data entity)
+
+
+updateData : String -> Value -> Type g s msg -> Type g s msg
+updateData key val (Entity entity) = Entity
+    (Data.updateData key val entity)
 
 
 addTicker : Ticker g s msg -> Type g s msg -> Type g s msg

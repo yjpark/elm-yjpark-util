@@ -1,7 +1,7 @@
 module YJPark.Game.Model.Component exposing (..)
 
 import YJPark.Util exposing (..)
-import YJPark.Data as Data exposing (Data)
+import YJPark.Data as Data exposing (Data, Value)
 
 import Game.TwoD.Render exposing (Renderable)
 
@@ -35,6 +35,11 @@ init key =
 setData : Data -> Type g s e msg -> Type g s e msg
 setData data (Component component) = Component
     (Data.setData data component)
+
+
+updateData : String -> Value -> Type g s e msg -> Type g s e msg
+updateData key val (Component component) = Component
+    (Data.updateData key val component)
 
 
 setTicker : Ticker g s e msg -> Type g s e msg -> Type g s e msg
