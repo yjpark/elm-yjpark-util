@@ -32,6 +32,11 @@ init key =
     initWithData key Data.empty
 
 
+getData : Type g s e msg -> Data
+getData (Component component) =
+    component.data
+
+
 setData : Data -> Type g s e msg -> Type g s e msg
 setData data (Component component) = Component
     (Data.setData data component)

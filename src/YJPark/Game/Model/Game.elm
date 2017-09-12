@@ -58,6 +58,11 @@ init base_url =
     initWithData base_url Data.empty
 
 
+getData : Type msg -> Data
+getData (Game game) =
+    game.data
+
+
 setData : Data -> Type msg -> Type msg
 setData data (Game game) = Game
     (Data.setData data game)

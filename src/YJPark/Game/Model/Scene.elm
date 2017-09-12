@@ -41,6 +41,11 @@ null =
     init <| Camera.fixedWidth 256 (0, 0)
 
 
+getData : Type g msg -> Data
+getData (Scene scene) =
+    scene.data
+
+
 setData : Data -> Type g msg -> Type g msg
 setData data (Scene scene) = Scene
     (Data.setData data scene)

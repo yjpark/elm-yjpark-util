@@ -40,6 +40,11 @@ init kind key =
     initWithData kind key Data.empty
 
 
+getData : Type g s msg -> Data
+getData (Entity entity) =
+    entity.data
+
+
 setData : Data -> Type g s msg -> Type g s msg
 setData data (Entity entity) = Entity
     (Data.setData data entity)
