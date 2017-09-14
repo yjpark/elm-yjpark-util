@@ -92,7 +92,7 @@ get isDebug msg key convertor default data =
             let
                 _ = case isDebug of
                     True ->
-                        debug4 "[Data] Value Not Found:" msg key default
+                        "" --debug4 "[Data] Value Not Found:" msg key default
                     False ->
                         error4 "[Data] Value Not Found:" msg key default
             in
