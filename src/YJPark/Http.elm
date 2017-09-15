@@ -14,8 +14,16 @@ type alias Request a = Http.Request a
 type alias Error = Http.Error
 
 
-logError : Request a -> Error -> Error
-logError req err =
+logSucceed : Request a -> a -> a
+logSucceed req res =
+    let
+        _ = info4 "[Http]" req "-> Succeed:" res
+    in
+        res
+
+
+logFailed : Request a -> Error -> Error
+logFailed req err =
     let
         _ = case err of
             Http.BadUrl url ->
@@ -35,7 +43,8 @@ logError req err =
 onResponse : Request val -> Result Error val -> Result Error val
 onResponse req res =
     res
-        |> Result.mapError (logError req)
+        |> Result.map (logSucceed req)
+        |> Result.mapError (logFailed req)
 
 
 cmd : (Result Error val -> msg) -> Request val -> Cmd msg
