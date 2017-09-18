@@ -1,6 +1,7 @@
 module YJPark.WeUi.TabBar exposing (..)
 import YJPark.WeUi.Types exposing (..)
 import YJPark.WeUi.Model as Model
+import YJPark.Html.Events as PE
 
 import Html as H exposing (Html)
 import Html.Attributes as A
@@ -12,7 +13,10 @@ import List
 renderTabs : Wrapper msg -> Html msg -> Model.Tabs -> Int -> Html msg
 renderTabs wrapper tab_content tabs current_tab =
     H.div [A.class "weui-tab"]
-        [ H.div [A.class "weui-tab__panel"]
+        [ H.div
+            [ A.class "weui-tab__panel"
+            , PE.onScroll (\evt -> wrapper <| Out <| OnScrollY <| toFloat evt.scrollPos)
+            ]
             [ tab_content
             ]
         , renderTabBar wrapper tabs current_tab

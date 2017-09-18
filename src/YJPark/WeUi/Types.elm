@@ -12,8 +12,18 @@ import Html exposing (Html)
 
 type alias DialogMeta = Model.DialogMeta
 
-type Msg
+
+type InMsg
     = DoLoadTabs Model.Tabs
+
+
+type OutMsg
+    = OnScrollY Float
+
+
+type Msg
+    = In InMsg
+    | Out OutMsg
     | DoSwitchTab Int
     | OnDialogOk DialogMeta
     | OnDialogCancel DialogMeta
