@@ -10,9 +10,13 @@ import Dict
 import Html exposing (Html)
 
 
+type alias DialogMeta = Model.DialogMeta
+
 type Msg
     = DoLoadTabs Model.Tabs
     | DoSwitchTab Int
+    | OnDialogOk DialogMeta
+    | OnDialogCancel DialogMeta
 
 
 type alias Wrapper msg = Msg -> msg
@@ -33,3 +37,14 @@ type alias Events obj msg = Events.Type obj msg
 
 type alias Renderer obj msg = Events.Type obj msg -> Type msg -> obj -> Html msg
 
+
+updateModel : (Model.Type -> Model.Type) -> Model m msg -> Model m msg
+updateModel updator model =
+    let
+        old = model.weui --need this temp variable, otherwise got compiler error
+        weui =
+            { old
+            | model = updator model.weui.model
+            }
+    in
+        {model | weui = weui}

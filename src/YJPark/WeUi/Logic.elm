@@ -15,3 +15,8 @@ update msg model =
             ({model | tabs = tabs}, Cmd.none)
         DoSwitchTab tab ->
             ({model | current_tab = tab}, Cmd.none)
+        OnDialogOk meta ->
+            ({model | dialog = Nothing}, Cmd.none)
+        OnDialogCancel meta ->
+            ({model | dialog = Nothing}, Cmd.none)
+

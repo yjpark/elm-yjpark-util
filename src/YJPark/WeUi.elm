@@ -4,9 +4,10 @@ import YJPark.WeUi.Types as Types
 import YJPark.WeUi.Model as Model
 import YJPark.WeUi.Logic as Logic
 import YJPark.WeUi.TabBar as TabBar
+import YJPark.WeUi.Dialog as Dialog
 import YJPark.Util exposing (..)
 
-import Html exposing (Html)
+import Html as H exposing (Html)
 
 
 -- Types
@@ -51,4 +52,14 @@ update msg model =
 
 view : Wrapper msg -> Html msg -> Model m msg -> Html msg
 view wrapper tab_content model =
-    TabBar.renderTabs wrapper tab_content model.weui.model.tabs model.weui.model.current_tab
+    let
+        tabs = TabBar.renderTabs wrapper tab_content model.weui.model.tabs model.weui.model.current_tab
+    in
+        case model.weui.model.dialog of
+            Nothing ->
+                tabs
+            Just dialog ->
+                H.div []
+                    [ tabs
+                    , Dialog.renderDialog wrapper dialog
+                    ]
