@@ -13,12 +13,17 @@ import Html exposing (Html)
 type alias DialogMeta = Model.DialogMeta
 
 
+tab_content_id = "_wxui_tab_content"
+
+
 type InMsg
     = DoLoadTabs Model.Tabs
+    | DoScrollY Float
 
 
 type OutMsg
     = OnScrollY Float
+    | OnSwitchTab
 
 
 type Msg
@@ -27,6 +32,7 @@ type Msg
     | DoSwitchTab Int
     | OnDialogOk DialogMeta
     | OnDialogCancel DialogMeta
+    | Nop
 
 
 type alias Wrapper msg = Msg -> msg

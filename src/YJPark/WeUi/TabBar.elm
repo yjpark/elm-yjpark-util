@@ -15,7 +15,8 @@ renderTabs wrapper tab_content tabs current_tab =
     H.div [A.class "weui-tab"]
         [ H.div
             [ A.class "weui-tab__panel"
-            , PE.onScroll (\evt -> wrapper <| Out <| OnScrollY <| toFloat evt.scrollPos)
+            , A.id tab_content_id
+            , PE.onScroll (\evt -> wrapper <| Out <| OnScrollY evt.scrollPos)
             ]
             [ tab_content
             ]
