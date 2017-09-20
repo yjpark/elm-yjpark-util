@@ -1,7 +1,7 @@
 module YJPark.Mdl.WithJson exposing (..)
 import YJPark.Mdl.Types exposing (..)
-import YJPark.Mdl.Events as Events
 import YJPark.Mdl.Json as MdlJson
+import YJPark.Events as Events
 import YJPark.Json as Json exposing (WithJson)
 
 import Html exposing (..)
