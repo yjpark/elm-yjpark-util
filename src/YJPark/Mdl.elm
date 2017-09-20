@@ -40,6 +40,8 @@ noIndex = []
 
 type alias WithIndex m = Types.WithIndex m
 
+type alias IndexModel = Types.IndexModel
+
 
 updateIndex : Index -> WithIndex m -> WithIndex m
 updateIndex index model =

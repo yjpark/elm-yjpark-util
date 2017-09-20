@@ -37,3 +37,6 @@ type alias WithIndex m =
     { m | index : Index }
 
 
+type alias IndexModel =
+    { index : Index
+    }

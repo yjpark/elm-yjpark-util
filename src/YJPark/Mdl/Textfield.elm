@@ -1,69 +1,69 @@
 module YJPark.Mdl.Textfield exposing (..)
 import YJPark.Mdl.Types exposing (..)
-import YJPark.Mdl.Events as Events
+import YJPark.Mdl.Action as Action
+import YJPark.Mdl.Events as MdlEvents
+import YJPark.Events as Events
 
 import Html exposing (..)
 import Html.Events
 
 import Material
 import Material.Textfield as Textfield
-import Material.Color as Color
+import Material.Color as Color exposing (Color)
 import Material.Icon as Icon
 import Material.Button as Button
 import Material.List as Lists
 import Material.Options as Options exposing (when, css)
 
 
--- label, value, icon, disabled
-type alias WithActionMeta = (String, String, String, Bool)
+-- label, value, action, options
+type alias Meta msg = (String, String, Maybe (Action.Meta msg), List (Textfield.Property msg))
 
 
--- label, value, color
-type alias AreaMeta = (String, String, Color.Color)
+commonOptions label value events obj =
+    [ Textfield.label label
+    , Textfield.floatingLabel
+    , MdlEvents.onInputOption events obj
+    , MdlEvents.onFocusOption events obj
+    , Textfield.value value
+    ]
 
 
-renderTextfieldWithAction : WithActionMeta -> Int -> Renderer (WithIndex obj) msg
-renderTextfieldWithAction (label, value, icon, disabled) index events mdl obj =
+
+renderTextfield : Meta msg -> Int -> Renderer (WithIndex obj) msg
+renderTextfield (label, value, action, options) index events mdl obj =
     -- Need to assign current inputed value with Textfield.value, otherwise the floating label will not
     -- be kept floating when not focused
     -- https://github.com/debois/elm-mdl/issues/278
     -- https://github.com/debois/elm-mdl/issues/333
     Options.div []
         [ Options.span []
-            [ Textfield.render mdl.wrapper (obj.index ++ [index, 0])  mdl.mdl
-                [ Textfield.label label
-                , Textfield.floatingLabel
-                , Events.onInputOption events obj
-                , Events.onFocusOption events obj
-                , Textfield.text_
-                , Textfield.value value
-                ]
+            ([Textfield.render mdl.wrapper (obj.index ++ [index, 0])  mdl.mdl
+                ( Textfield.text_
+                :: commonOptions label value events obj
+                ++ options)
                 []
-            , Button.render mdl.wrapper (obj.index ++ [index, 1]) mdl.mdl
-                [ Button.icon
-                , Button.colored
-                , Button.disabled |> when (disabled)
-                , Events.onClickOption events obj
-                ]
-                [ Icon.i icon ]
-            ]
+            ] |> Action.appendAction action [index, 1] events mdl obj)
         ]
 
 
-renderTextareaWithDummyAction : AreaMeta -> Int -> Renderer (WithIndex obj) msg
-renderTextareaWithDummyAction (label, value, color) index events mdl obj =
+renderTextarea : Meta msg -> Int -> Renderer (WithIndex obj) msg
+renderTextarea (label, value, action, options) index events mdl obj =
     Options.div []
         [ Options.span []
-            [ Textfield.render mdl.wrapper (obj.index ++ [index, 0]) mdl.mdl
-                [ Textfield.label label
-                , Textfield.floatingLabel
-                , Color.text color
-                , Textfield.textarea
-                , Textfield.value value
-                ]
+            ([Textfield.render mdl.wrapper (obj.index ++ [index, 0])  mdl.mdl
+                ( Textfield.textarea
+                :: commonOptions label value events obj
+                ++ options)
                 []
-            , Button.render mdl.wrapper (obj.index ++ [index, 1]) mdl.mdl
-                [ Button.icon ]
-                [ Icon.i "" ]
-            ]
+            ] |> Action.appendAction action [index, 1] events mdl obj)
         ]
+
+
+renderTextareaWithDummyAction : (String, String, Color) -> Int -> Renderer (WithIndex obj) msg
+renderTextareaWithDummyAction (label, value, color) index events =
+    let
+        options =
+            [ Color.text color ]
+    in
+        renderTextarea (label, value, Nothing, options) index Events.null
