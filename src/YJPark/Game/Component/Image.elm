@@ -88,16 +88,21 @@ init t (w, h) =
     initWithPivot t (w, h) (0.5, 0.5)
 
 
-gatherTextures : Game.Scene msg -> List String
+gatherTextures : Game.Scene msg -> List (String, Int)
 gatherTextures =
     SceneLogic.traverseComponents (\(Component component) ->
         let
             texture = component.data
                 |> Data.getString key_texture
+            width = component.data
+                |> Data.getFloat key_width
+            height = component.data
+                |> Data.getFloat key_height
+            size = round (width * height)
         in
             case (texture == "") of
                 True ->
                     Nothing
                 False ->
-                    Just texture
+                    Just (texture, size)
     )

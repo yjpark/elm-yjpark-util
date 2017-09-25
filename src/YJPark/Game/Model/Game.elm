@@ -3,11 +3,11 @@ import YJPark.Game.Model.Registry as Registry
 import YJPark.Game.Model.Scene as Scene exposing (Type(..))
 import YJPark.Game.Model.Entity as Entity exposing (Type(..))
 import YJPark.Game.Model.Component as Component exposing (Type(..))
+import YJPark.Game.Assets.Model.Mod as Assets
 
 import YJPark.Util exposing (..)
 import YJPark.Data as Data exposing (Data, Value)
 
-import Game.Resources as Resources exposing (Resources)
 import Game.TwoD.Camera as Camera exposing (Camera)
 import Keyboard.Extra
 
@@ -33,8 +33,7 @@ type Type msg = Game
     , delta : Float
     , frame : Int
     , registry : Registry msg
-    , base_url : String
-    , resources : Resources
+    , assets : Assets.Type
     , data : Data
     , scene : Scene msg
     }
@@ -46,8 +45,7 @@ initWithData base_url data = Game
     , delta = 0
     , frame = 0
     , registry = Registry.empty
-    , base_url = base_url
-    , resources = Resources.init
+    , assets = Assets.init base_url
     , data = data
     , scene = Scene.null
     }

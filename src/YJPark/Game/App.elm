@@ -4,6 +4,8 @@ import YJPark.Game.Builtin as Builtin
 import YJPark.Game.Model.Game as Game exposing (Type(..))
 import YJPark.Game.Model.Scene as Scene exposing (Type(..))
 import YJPark.Game.Model.Registry as Registry
+import YJPark.Game.Assets.Mod as Assets
+import YJPark.Game.Assets.Model.Bundle as Bundle
 
 import YJPark.Game.Logic.Game as GameLogic
 import YJPark.Game.Logic.Scene as SceneLogic
@@ -69,16 +71,18 @@ update msg (Game game) =
         DoLoadResources ->
             let
                 textures = Image.gatherTextures game.scene
-                    |> List.map (\u -> game.base_url ++ u)
+                bundle = Bundle.init textures
             in
                 (Game game) !
-                    [ Resources.loadTextures textures
-                        |> Cmd.map ResourceMsg
+                    [ toCmd <| AssetsMsg <| Assets.In <| Assets.DoLoad bundle
                     ]
         DoLoadScene meta ->
             loadScene meta (Game game)
-        ResourceMsg msg_ ->
-            (Game {game | resources = Resources.update msg_ game.resources}) ! []
+        AssetsMsg msg_ ->
+            let
+                (assets, cmd) = Assets.update msg_ game.assets
+            in
+                (Game {game | assets = assets}) ! [ Cmd.map AssetsMsg cmd ]
         ExtMsg _ ->
             (Game game) ! []
 
