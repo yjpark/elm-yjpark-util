@@ -75,7 +75,7 @@ update msg model =
             model ! []
         OnTexture path (Ok texture) ->
             let
-                _ = error3 "OnTexture OK" path texture
+                --_ = error3 "OnTexture OK" path texture
                 assets = model.assets
                     |> Dict.insert path (Model.Texture texture)
                 bundle = model.bundle
