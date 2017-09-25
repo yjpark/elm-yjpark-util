@@ -97,6 +97,11 @@ isFailed model =
     not (Dict.isEmpty model.failed)
 
 
+isLoadingOrFailed : Type -> Bool
+isLoadingOrFailed model =
+    (isLoading model) || (isFailed model)
+
+
 calcAssetSize : AssetMeta -> Int
 calcAssetSize meta =
     case meta of

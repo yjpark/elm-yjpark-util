@@ -85,3 +85,9 @@ setSceneRoot root (Game game) = Game
     }
 
 
+getAssets : Type msg -> Assets.Type
+getAssets (Game game) =
+    game.assets
+
+
+
