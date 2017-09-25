@@ -53,12 +53,16 @@ getDoneCmds bundle =
 
 getLoadCmd : Model -> (String, Bundle.AssetMeta) -> Cmd Msg
 getLoadCmd model (path, meta) =
-    let
-        url = model.base_url ++ path
-    in
-        case meta of
-            Bundle.Texture _ ->
-                Task.attempt (OnTexture path) (Texture.load url)
+    case Dict.get path model.assets of
+        Nothing ->
+            let
+                url = model.base_url ++ path
+            in
+                case meta of
+                    Bundle.Texture _ ->
+                        Task.attempt (OnTexture path) (Texture.load url)
+        Just (Model.Texture texture) ->
+            toCmd <| OnTexture path (Ok texture)
 
 
 update : Msg -> Model -> (Model, Cmd Msg)
