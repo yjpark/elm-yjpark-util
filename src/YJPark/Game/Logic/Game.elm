@@ -21,3 +21,23 @@ import Keyboard.Extra
 getTexture : String -> Game msg -> Maybe Texture
 getTexture texture (Game game) =
     Assets.getTexture texture game.assets
+
+
+tick : (msg -> Game msg -> (Game msg, Cmd msg)) -> Game msg -> (Game msg, Cmd msg)
+tick update (Game game) =
+    let
+        (scene, msgs) = SceneLogic.tick (Game game) game.scene
+        result = Game {game | scene = scene}
+        fold = (\msg (Game current_game, current_cmds) ->
+            let
+                (next_game, cmd) = update msg (Game current_game)
+            in
+                (next_game, cmd :: current_cmds)
+            )
+        (result_after_msgs, cmds) = msgs
+            |> List.foldl fold (result, [])
+    in
+        result_after_msgs ! (List.reverse cmds)
+
+
+

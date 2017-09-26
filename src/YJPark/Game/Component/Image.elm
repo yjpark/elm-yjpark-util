@@ -1,5 +1,5 @@
 module YJPark.Game.Component.Image exposing (..)
-import YJPark.Game.Consts exposing (..)
+import YJPark.Game.Consts as Consts
 import YJPark.Game.Model.Game as Game exposing (Type(..))
 import YJPark.Game.Model.Entity as Entity exposing (Type(..))
 import YJPark.Game.Model.Component as Component exposing (Type(..))
@@ -18,6 +18,15 @@ import WebGL.Texture as Texture exposing (Texture)
 import Color
 
 
+kind = Consts.kind_Image
+
+key_texture = Consts.key_texture
+key_width = Consts.key_width
+key_height = Consts.key_height
+key_pivot_x = Consts.key_pivot_x
+key_pivot_y = Consts.key_pivot_y
+
+
 data : String -> (Float, Float) -> (Float, Float) -> Data
 data t (w, h) (px, py) =
     Data.empty
@@ -28,7 +37,16 @@ data t (w, h) (px, py) =
         |> Data.insertFloat key_pivot_y py
 
 
-default = data "" (0, 0) (0.5, 0.5)
+metaWithPivot : String -> (Float, Float) -> (Float, Float) -> ComponentMeta.Type
+metaWithPivot t (w, h) (px, py) =
+    { kind = kind
+    , data = data t (w, h) (px, py)
+    }
+
+
+meta : String -> (Float, Float) -> ComponentMeta.Type
+meta t (w, h) =
+    metaWithPivot t (w, h) (0.5, 0.5)
 
 
 render : Game.ComponentRenderer msg
@@ -55,37 +73,6 @@ setup : Game.Component msg -> Game.Component msg
 setup component =
     component
         |> Component.setRenderer render
-
-
-initWithData : Data -> Game.Component msg
-initWithData data =
-    default
-        |> Data.merge data
-        |> Component.initWithData kind_Image
-        |> Component.setRenderer render
-
-
-metaWithPivot : String -> (Float, Float) -> (Float, Float) -> ComponentMeta.Type
-metaWithPivot t (w, h) (px, py) =
-    { kind = kind_Image
-    , data = data t (w, h) (px, py)
-    }
-
-
-initWithPivot : String -> (Float, Float) -> (Float, Float) -> Game.Component msg
-initWithPivot t (w, h) (px, py) =
-    data t (w, h) (px, py)
-        |> initWithData
-
-
-meta : String -> (Float, Float) -> ComponentMeta.Type
-meta t (w, h) =
-    metaWithPivot t (w, h) (0.5, 0.5)
-
-
-init : String -> (Float, Float) -> Game.Component msg
-init t (w, h) =
-    initWithPivot t (w, h) (0.5, 0.5)
 
 
 gatherTextures : Game.Scene msg -> List (String, Int)

@@ -50,9 +50,16 @@ tick delta (Game game) =
             , delta = delta
             , frame = game.frame + 1
             }
-        (scene, cmd) = SceneLogic.tick (Game result) result.scene
+        updateTickMsg : Msg ext -> Model ext -> (Model ext, Cmd (Msg ext))
+        updateTickMsg = (\msg game ->
+            case msg of
+                ExtMsg _ ->
+                    (game, toCmd <| msg)
+                _ ->
+                    update msg game
+            )
     in
-        (Game {result | scene = scene}) ! [cmd]
+        GameLogic.tick updateTickMsg (Game result)
 
 
 loadScene : SceneMeta.Type -> Model ext -> (Model ext, Cmd (Msg ext))
@@ -78,6 +85,11 @@ update msg (Game game) =
                     ]
         DoLoadScene meta ->
             loadScene meta (Game game)
+        DoUpdateEntity path updater ->
+            let
+                scene = SceneLogic.updateEntity path updater game.scene
+            in
+                (Game {game | scene = scene}) ! []
         AssetsMsg msg_ ->
             let
                 (assets, cmd) = Assets.update msg_ game.assets

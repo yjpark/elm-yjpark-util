@@ -1,5 +1,6 @@
 module YJPark.Game.Model.Scene exposing (..)
 import YJPark.Game.Model.Entity as Entity
+import YJPark.Game.Model.Physics as Physics
 
 import YJPark.Util exposing (..)
 import YJPark.Data as Data exposing (Data, Value)
@@ -15,11 +16,12 @@ type Type g msg = Scene
     { camera : Camera
     , data : Data
     , root : Entity g msg
+    , physics : Maybe Physics.Type
     , tickers : List (Ticker g msg)
     }
 
 
-type alias Ticker g msg = g -> Type g msg -> (Type g msg, Cmd msg)
+type alias Ticker g msg = g -> Type g msg -> (Type g msg, List msg)
 
 
 initWithData : Camera -> Data -> Type g msg
@@ -27,6 +29,7 @@ initWithData camera data = Scene
     { camera = camera
     , data = data
     , root = Entity.init "" ""
+    , physics = Nothing
     , tickers = []
     }
 
@@ -73,3 +76,11 @@ setRoot root (Scene scene) = Scene
     { scene
     | root = root
     }
+
+
+setPhysics : Physics.Type -> Type g msg -> Type g msg
+setPhysics physics (Scene scene) = Scene
+    { scene
+    | physics = Just physics
+    }
+

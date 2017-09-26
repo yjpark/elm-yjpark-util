@@ -16,11 +16,11 @@ import Game.TwoD.Render exposing (Renderable)
 import Keyboard.Extra
 
 
-tick : Game msg -> Scene msg -> List (Entity msg) -> Entity msg -> Component msg -> (Component msg, Cmd msg)
+tick : Game msg -> Scene msg -> List (Entity msg) -> Entity msg -> Component msg -> (Component msg, List msg)
 tick game scene ancestors (Entity entity) (Component component) =
     case component.ticker of
         Nothing ->
-            (Component component) ! []
+            (Component component, [])
         Just ticker ->
             ticker game scene ancestors (Entity entity) (Component component)
 

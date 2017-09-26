@@ -8,6 +8,8 @@ import YJPark.Data as Data exposing (Data, Value)
 
 type alias Component g s msg = Component.Type g s (Type g s msg) msg
 
+type alias Path = List String
+
 
 type Type g s msg = Entity
     { kind : String
@@ -20,7 +22,7 @@ type Type g s msg = Entity
     }
 
 
-type alias Ticker g s msg = g -> s -> List (Type g s msg) -> Type g s msg -> (Type g s msg, Cmd msg)
+type alias Ticker g s msg = g -> s -> List (Type g s msg) -> Type g s msg -> (Type g s msg, List msg)
 
 
 initWithData : String -> String -> Data -> Type g s msg
@@ -38,6 +40,11 @@ initWithData kind key data = Entity
 init : String -> String -> Type g s msg
 init kind key =
     initWithData kind key Data.empty
+
+
+getKey : Type g s msg -> String
+getKey (Entity entity) =
+    entity.key
 
 
 getData : Type g s msg -> Data
@@ -77,6 +84,29 @@ getChild key (Entity entity) =
     entity.children
         |> List.filter (\(Entity e) -> e.key == key)
         |> List.head
+
+
+updateChild : String -> (Type g s msg -> Type g s msg) -> Type g s msg -> Type g s msg
+updateChild key updater (Entity entity) = Entity
+    (case getChild key (Entity entity) of
+        Nothing ->
+            let _ = error4 "Entity.updateChild Failed: child not found" key updater entity in
+            entity
+        Just child ->
+            let
+                new_child = updater child
+                update = (\(Entity e) ->
+                        case e.key == key of
+                            True ->
+                                new_child
+                            False ->
+                                Entity e
+                    )
+                children = entity.children
+                    |> List.map update
+            in
+                {entity | children = children}
+    )
 
 
 insertOrAddChild : Bool -> Type g s msg -> Type g s msg -> Type g s msg
@@ -164,3 +194,8 @@ setTransformWorld world (Entity entity) = Entity
     }
         |> updateChildrenTransform
 
+
+calcPath : List (Type g s msg) -> Type g s msg -> Path
+calcPath ancestors entity =
+    (ancestors ++ [ entity ])
+        |> List.map (\(Entity e) -> e.key)

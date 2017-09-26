@@ -1,4 +1,5 @@
 module YJPark.Game.Logic.Entity exposing (..)
+import YJPark.Game.Consts as Consts exposing (path_separator)
 import YJPark.Game.Logic.Component as ComponentLogic
 
 import YJPark.Game.Model.Game as Game exposing (Type(..), Game, Scene, Entity, Component, SceneTicker, EntityTicker, Registry)
@@ -15,40 +16,53 @@ import YJPark.Data as Data exposing (Data)
 import Game.TwoD.Camera as Camera exposing (Camera)
 import Game.TwoD.Render exposing (Renderable)
 
-import Keyboard.Extra
+import String
+
+
+reverseMsgs : (a, List b) -> (a, List b)
+reverseMsgs (model, msgs) =
+    (model, List.reverse msgs)
+
 
 tick : EntityTicker msg
-tick game scene ancestors (Entity entity) =
+tick game scene ancestors entity =
     let
-        fold = (\ticker (current_entity, current_cmds) ->
-            let
-                (next_entity, cmd) = ticker game scene ancestors current_entity
-                next_cmds = if cmd == Cmd.none
-                    then
-                        current_cmds
-                    else
-                        cmd :: current_cmds
-            in
-                (next_entity, next_cmds)
-        )
-        (Entity result, cmds) = entity.tickers
-            |> List.foldr fold (Entity entity, [])
-        (components, components_cmds) = tickComponents game scene ancestors (Entity result)
+        (Entity result, self_msgs) = tickSelf game scene ancestors entity
+        (components, components_msgs) = tickComponents game scene ancestors (Entity result)
         result_with_components = {result | components = components}
-        (children, children_cmds) = tickChildren game scene ancestors (Entity result_with_components)
+        (children, children_msgs) = tickChildren game scene ancestors (Entity result_with_components)
         result_with_children = {result_with_components | children = children}
+        msgs = [ self_msgs, components_msgs, children_msgs ]
+            |> List.map List.concat
+            |> List.concat
     in
-        (Entity result_with_children) ! (cmds ++ components_cmds ++ children_cmds)
+        (Entity result_with_children, msgs)
 
 
-tickComponents : Game msg -> Scene msg -> List (Entity msg) -> Entity msg -> (List (Component msg), List (Cmd msg))
+tickSelf : Game msg -> Scene msg -> List (Entity msg) -> Entity msg -> (Entity msg, List (List msg))
+tickSelf game scene ancestors (Entity entity) =
+    let
+        fold = (\ticker (current_entity, current_msgs) ->
+            let
+                (next_entity, msgs) = ticker game scene ancestors current_entity
+                next_msgs = msgs :: current_msgs
+            in
+                (next_entity, next_msgs)
+            )
+    in
+        entity.tickers
+            |> List.foldl fold (Entity entity, [])
+            |> reverseMsgs
+
+
+tickComponents : Game msg -> Scene msg -> List (Entity msg) -> Entity msg -> (List (Component msg), List (List msg))
 tickComponents game scene ancestors (Entity entity) =
     entity.components
         |> List.map (ComponentLogic.tick game scene ancestors (Entity entity))
         |> List.unzip
 
 
-tickChildren : Game msg -> Scene msg -> List (Entity msg) -> Entity msg -> (List (Entity msg), List (Cmd msg))
+tickChildren : Game msg -> Scene msg -> List (Entity msg) -> Entity msg -> (List (Entity msg), List (List msg))
 tickChildren game scene ancestors (Entity entity) =
     let
         children_ancestors = (Entity entity) :: ancestors
@@ -127,4 +141,19 @@ load registry (EntityMeta meta) =
             |> List.map (load registry)
             |> List.foldr Entity.insertChild with_components
             |> Entity.setTransformLocal meta.transform
+
+
+updateEntity : Entity.Path -> (Entity msg -> Entity msg) -> Entity msg -> Entity msg
+updateEntity path updater =
+    case List.head path of
+        Nothing ->
+            updater
+        Just key ->
+            case List.tail path of
+                Nothing ->
+                    Entity.updateChild key updater
+
+                Just left ->
+                    Entity.updateChild key (updateEntity left updater)
+
 

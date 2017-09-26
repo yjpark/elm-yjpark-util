@@ -5,6 +5,7 @@ module YJPark.Util exposing
     , debug1, debug2, debug3, debug4, debug5, debug6
     , addCmd, updateModel, noOperation
     , toCmd, toFutureCmd
+    , updateObj, addMsg
     , insertCmd, insertMapCmd
     , noReaction, Updater, Wrapper, wrap
     , (===), (/==))
@@ -93,6 +94,16 @@ type alias Updater model msg = Updater.Updater model msg
 type alias Wrapper msg targetMsg = Updater.Converter msg targetMsg
 
 wrap = Updater.converter
+
+
+updateObj : (obj -> obj) -> (obj, List msg) -> (obj, List msg)
+updateObj updater (obj, msgs) =
+    (updater obj, msgs)
+
+
+addMsg : msg -> (obj, List msg) -> (obj, List msg)
+addMsg msg (obj, msgs) =
+    (obj, msg :: msgs)
 
 
 toFutureCmd : Time.Time -> msg -> Cmd msg

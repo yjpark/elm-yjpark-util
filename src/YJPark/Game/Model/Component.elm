@@ -14,7 +14,7 @@ type Type g s e msg = Component
     }
 
 
-type alias Ticker g s e msg = (g -> s -> List e -> e -> Type g s e msg -> (Type g s e msg, Cmd msg))
+type alias Ticker g s e msg = (g -> s -> List e -> e -> Type g s e msg -> (Type g s e msg, List msg))
 type alias Renderer g s e msg = (g -> s -> List e -> e -> Type g s e msg -> Renderable)
 
 
