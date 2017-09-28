@@ -22,6 +22,7 @@ type alias EntityTicker msg = Entity.Ticker (Type msg) (Scene msg) msg
 type alias Component msg = Component.Type (Type msg) (Scene msg) (Entity msg) msg
 type alias ComponentTicker msg = Component.Ticker (Type msg) (Scene msg) (Entity msg) msg
 type alias ComponentRenderer msg = Component.Renderer (Type msg) (Scene msg) (Entity msg) msg
+type alias ComponentElementTicker msg c = Component.ElementTicker (Type msg) (Scene msg) (Entity msg) msg c
 
 type alias Registry msg = Registry.Type (Type msg) msg
 type alias EntitySetup msg = Registry.EntitySetup (Type msg) msg

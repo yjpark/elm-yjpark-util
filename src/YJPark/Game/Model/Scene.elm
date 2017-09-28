@@ -84,3 +84,13 @@ setPhysics physics (Scene scene) = Scene
     | physics = Just physics
     }
 
+
+updatePhysics : (Physics.Type -> Physics.Type) -> Type g msg -> Type g msg
+updatePhysics updater (Scene scene) =
+    let
+        physics = scene.physics
+            |> Maybe.map updater
+    in Scene
+        { scene
+        | physics = physics
+        }

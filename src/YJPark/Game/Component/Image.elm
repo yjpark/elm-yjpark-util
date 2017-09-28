@@ -1,6 +1,8 @@
 module YJPark.Game.Component.Image exposing (..)
 import YJPark.Game.Consts as Consts
-import YJPark.Game.Model.Game as Game exposing (Type(..))
+import YJPark.Game.Types as Types exposing (Msg(..))
+import YJPark.Game.Model.Game as Game exposing (Type(..), Game, Scene, Entity, Component, SceneTicker, EntityTicker, Registry)
+import YJPark.Game.Model.Scene as Scene exposing (Type(..))
 import YJPark.Game.Model.Entity as Entity exposing (Type(..))
 import YJPark.Game.Model.Component as Component exposing (Type(..))
 import YJPark.Game.Model.Transform as Transform
@@ -49,7 +51,7 @@ meta t (w, h) =
     metaWithPivot t (w, h) (0.5, 0.5)
 
 
-render : Game.ComponentRenderer msg
+render : Game.ComponentRenderer (Msg ext)
 render game scene ancestors (Entity entity) (Component component) =
     let
         t = Data.getString key_texture component.data
@@ -59,7 +61,7 @@ render game scene ancestors (Entity entity) (Component component) =
         py = Data.getFloat key_pivot_y component.data
         --_ = error6 "Image.render:" game scene entity component component.data
     in
-        Render.spriteWithOptions
+        [ Render.spriteWithOptions
             { texture = GameLogic.getTexture t game
             , position = Transform.getPosition entity.transform
             , rotation = Transform.getRotation entity.transform
@@ -67,15 +69,15 @@ render game scene ancestors (Entity entity) (Component component) =
             , pivot = (px, py)
             , tiling = (1, 1)
             }
+        ]
 
-
-setup : Game.Component msg -> Game.Component msg
+setup : Game.Component (Msg ext) -> Game.Component (Msg ext)
 setup component =
     component
         |> Component.setRenderer render
 
 
-gatherTextures : Game.Scene msg -> List (String, Int)
+gatherTextures : Game.Scene (Msg ext) -> List (String, Int)
 gatherTextures =
     SceneLogic.traverseComponents (\(Component component) ->
         let

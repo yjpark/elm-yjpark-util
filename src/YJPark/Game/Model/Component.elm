@@ -15,7 +15,9 @@ type Type g s e msg = Component
 
 
 type alias Ticker g s e msg = (g -> s -> List e -> e -> Type g s e msg -> (Type g s e msg, List msg))
-type alias Renderer g s e msg = (g -> s -> List e -> e -> Type g s e msg -> Renderable)
+type alias Renderer g s e msg = (g -> s -> List e -> e -> Type g s e msg -> List Renderable)
+
+type alias ElementTicker g s e msg c = (g -> s -> List e -> e -> Type g s e msg -> c -> (c, List msg))
 
 
 initWithData : String -> Data -> Type g s e msg

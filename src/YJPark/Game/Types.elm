@@ -31,6 +31,7 @@ type Msg ext
     | DoLoadScene SceneMeta
     | AssetsMsg Assets.Msg
     | DoTick Float
+    | DoUpdateScene (Scene ext -> Scene ext)
     | DoUpdateEntity EntityPath (Entity ext -> Entity ext)
     | ExtMsg ext
 

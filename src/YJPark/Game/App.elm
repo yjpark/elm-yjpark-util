@@ -85,6 +85,11 @@ update msg (Game game) =
                     ]
         DoLoadScene meta ->
             loadScene meta (Game game)
+        DoUpdateScene updater ->
+            let
+                scene = updater game.scene
+            in
+                (Game {game | scene = scene}) ! []
         DoUpdateEntity path updater ->
             let
                 scene = SceneLogic.updateEntity path updater game.scene

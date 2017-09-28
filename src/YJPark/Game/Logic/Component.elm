@@ -31,7 +31,7 @@ render game scene ancestors (Entity entity) (Component component) =
         Nothing ->
             []
         Just renderer ->
-            [renderer game scene ancestors (Entity entity) (Component component)]
+            renderer game scene ancestors (Entity entity) (Component component)
 
 
 load : Registry msg -> ComponentMeta.Type -> Component msg
