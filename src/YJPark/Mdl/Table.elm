@@ -11,10 +11,12 @@ import Material.Table as Table
 
 type alias CellMeta obj msg = (String, Bool, Renderer obj msg) -- title, is_numeric renderer
 
+type alias Meta obj msg = (List (CellMeta obj msg), List (Options.Property {} msg)) -- cells, options
 
-renderTable : List (CellMeta obj msg) -> Events obj msg -> Type msg -> List obj -> Html msg
-renderTable cells events mdl objects =
-    Table.table []
+
+renderTable : Meta obj msg -> Events obj msg -> Type msg -> List obj -> Html msg
+renderTable (cells, options) events mdl objects =
+    Table.table options
         [ Table.thead []
             [ Table.tr []
                 (cells
