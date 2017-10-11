@@ -34,17 +34,27 @@ renderTabBar wrapper tabs current_tab =
 renderTabItem : Wrapper msg -> Int -> Int -> Model.Tab -> Html msg
 renderTabItem wrapper current_tab index tab =
     let
-        on_class = if current_tab == index
-            then
+        is_current = current_tab == index
+        on_class = case is_current of
+            True ->
                 [A.class " weui-bar__item_on"]
-            else
+            False ->
                 []
         on_click = [E.onClick (wrapper <| DoSwitchTab index)]
+        image = case tab.selectedImage of
+            Nothing ->
+                tab.image
+            Just selectedImage ->
+                case is_current of
+                    True ->
+                        selectedImage
+                    False ->
+                        tab.image
     in
         H.div ([A.class "weui-tabbar__item"] ++ on_class ++ on_click)
             [ H.img
                 [ A.class "weui-tabbar__icon"
-                , A.src tab.image
+                , A.src image
                 ] []
             , H.p
                 [ A.class "weui-tabbar__label"
