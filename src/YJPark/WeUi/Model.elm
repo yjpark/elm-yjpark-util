@@ -15,7 +15,7 @@ type alias DialogMeta =
 
 
 type alias Tab =
-    { title : String
+    { title : Maybe String
     , image : String
     , selectedImage : Maybe String
     }

@@ -50,15 +50,20 @@ renderTabItem wrapper current_tab index tab =
                         selectedImage
                     False ->
                         tab.image
+        title = case tab.title of
+            Nothing ->
+                []
+            Just title ->
+                [ H.p
+                    [ A.class "weui-tabbar__label"
+                    , A.style [("margin-bottom", "0px")]
+                    ]
+                    [ H.text title ]
+                ]
     in
         H.div ([A.class "weui-tabbar__item"] ++ on_class ++ on_click)
-            [ H.img
+            ([ H.img
                 [ A.class "weui-tabbar__icon"
                 , A.src image
                 ] []
-            , H.p
-                [ A.class "weui-tabbar__label"
-                , A.style [("margin-bottom", "0px")]
-                ]
-                [ H.text tab.title ]
-            ]
+            ] ++ title)
